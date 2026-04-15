@@ -1,28 +1,29 @@
 package com.sprint.project.business_management_system.service;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sprint.project.business_management_system.Entity.Employee;
-import com.sprint.project.business_management_system.repository.EmployeeRepository;
+import com.sprint.project.business_management_system.Entity.Order;
+import com.sprint.project.business_management_system.repository.OrderRepository;
 
 @Service
-public class EmployeeService {
+public class OrderService {
 
     @Autowired
-    private EmployeeRepository repo;
+    private OrderRepository repo;
 
-    public List<Employee> getAll() {
+    public List<Order> getAll() {
         return repo.findAll();
     }
 
-    public Employee getById(int id) {
+    public Order getById(int id) {
         return repo.findById(id).orElse(null);
     }
 
-    public Employee save(Employee e) {
-        return repo.save(e);
+    public Order save(Order o) {
+        return repo.save(o);
     }
 
     public void delete(int id) {
