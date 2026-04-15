@@ -31,7 +31,10 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<Payment> payments;
 
-	public Integer getCustomerNumber() {
+	public Integer getCustomerNumber()
+	
+	
+	{
 		return customerNumber;
 	}
 
