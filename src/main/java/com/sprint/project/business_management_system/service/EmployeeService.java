@@ -9,22 +9,17 @@ import com.sprint.project.business_management_system.repository.EmployeeReposito
 
 @Service
 public class EmployeeService {
-
     @Autowired
     private EmployeeRepository repo;
-
     public List<Employee> getAll() {
         return repo.findAll();
     }
-
     public Employee getById(int id) {
         return repo.findById(id).orElse(null);
     }
-
     public Employee save(Employee e) {
         return repo.save(e);
     }
-
     public void delete(int id) {
         repo.deleteById(id);
     }
