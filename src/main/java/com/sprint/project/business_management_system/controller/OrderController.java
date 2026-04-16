@@ -14,6 +14,11 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;   // ✅ use interface
+    
+    @PostMapping
+    public Order createOrder(@RequestBody Order order) {
+        return orderService.createOrder(order);
+    }
 
     // Get order with details by ID
     @GetMapping("/{id}")
