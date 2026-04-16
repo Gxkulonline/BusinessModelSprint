@@ -11,23 +11,23 @@ import com.sprint.project.business_management_system.repository.ProductRepositor
 @Service
 public class ProductService {
 
-	 @Autowired
-	    private ProductRepository repo;
+    @Autowired
+    private ProductRepository repo;
 
-	    public List<Product> getAll() {
-	        return repo.findAll();
-	    }
+    public List<Product> getAllProducts() {
+        return repo.findAll();
+    }
 
-	    public Product getById(String id) {
-	        return repo.findById(id).orElse(null);
-	    }
+    public Product getProductById(String id) {
+        return repo.findById(id).orElse(null);
+    }
 
-	    public Product save(Product p) {
-	        return repo.save(p);
-	    }
+    public Product saveProduct(Product product) {
+        return repo.save(product);
+    }
 
-	    public void delete(String id) {
-	        repo.deleteById(id);
-	    }
-
+    // 🔥 Based on your schema (productLine column)
+    public List<Product> getProductsByProductLine(String productLine) {
+        return repo.findByProductLine(productLine);
+    }
 }

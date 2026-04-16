@@ -3,7 +3,6 @@ package com.sprint.project.business_management_system.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,21 +22,16 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAll() {
-        return service.getAll();
+        return service.getAllProducts();
     }
 
     @GetMapping("/{id}")
     public Product getById(@PathVariable String id) {
-        return service.getById(id);
+        return service.getProductById(id);
     }
 
     @PostMapping
-    public Product save(@RequestBody Product p) {
-        return service.save(p);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
-        service.delete(id);
+    public Product save(@RequestBody Product product) {
+        return service.saveProduct(product);
     }
 }

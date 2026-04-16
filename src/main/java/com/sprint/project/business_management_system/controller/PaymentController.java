@@ -1,22 +1,17 @@
 package com.sprint.project.business_management_system.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sprint.project.business_management_system.Entity.Payment;
-import com.sprint.project.business_management_system.Entity.PaymentId;
 import com.sprint.project.business_management_system.service.PaymentService;
 
-import com.sprint.project.business_management_system.service.PaymentService;
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
@@ -24,19 +19,21 @@ public class PaymentController {
     @Autowired
     private PaymentService service;
 
+    // ✅ Get all payments
     @GetMapping
     public List<Payment> getAll() {
-        return service.getAll();
+        return service.getAllPayments();
     }
 
-    @PostMapping
-    public Payment save(@RequestBody Payment p) {
-        return service.save(p);
+    // ✅ Get payments by customer
+    @GetMapping("/customer/{id}")
+    public List<Payment> getByCustomer(@PathVariable Integer id) {
+        return service.getPaymentsByCustomer(id);
     }
 
-    @DeleteMapping
-    public void delete(@RequestBody PaymentId id) {
-        service.delete(id);
+    // ✅ OPTIONAL (simple total amount)
+    @GetMapping("/total/{id}")
+    public BigDecimal getTotalAmount(@PathVariable Integer id) {
+        return service.getTotalAmountByCustomer(id);
     }
-
 }

@@ -12,21 +12,16 @@ import com.sprint.project.business_management_system.repository.OrderRepository;
 public class OrderService {
 
     @Autowired
-    private OrderRepository repo;
+    private OrderRepository orderRepo;
 
-    public List<Order> getAll() {
-        return repo.findAll();
+    // Get order by id (with details automatically if mapping is correct)
+    public Order getOrderWithDetails(Integer id) {
+        return orderRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
-    public Order getById(int id) {
-        return repo.findById(id).orElse(null);
-    }
-
-    public Order save(Order o) {
-        return repo.save(o);
-    }
-
-    public void delete(int id) {
-        repo.deleteById(id);
+    // Get orders by status
+    public List<Order> getOrdersByStatus(String status) {
+        return orderRepo.findByStatus(status);
     }
 }
