@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import com.sprint.project.business_management_system.Entity.Customer;
 import com.sprint.project.business_management_system.repository.CustomerRepository;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
@@ -27,7 +29,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer save(@RequestBody Customer c) {
+    public Customer save( @Valid @RequestBody Customer c) {
         return repo.save(c);
     }
 
