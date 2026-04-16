@@ -19,7 +19,9 @@ public class GlobalExceptionHandler {
 
     // Duplicate Resource
     @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<String> handleDuplicate(DuplicateResourceException ex) {
+    public ResponseEntity<String> handleDuplicate(DuplicateResourceException ex) 
+    
+    {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
