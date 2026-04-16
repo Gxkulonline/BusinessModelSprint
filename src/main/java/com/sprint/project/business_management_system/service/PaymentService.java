@@ -7,6 +7,7 @@ import com.sprint.project.business_management_system.Entity.Payment;
 
 public interface PaymentService {
 	List<Payment> getAllPayments();
+	Payment createPayment(Payment payment);
 
     List<Payment> getPaymentsByCustomer(Integer customerId);
 

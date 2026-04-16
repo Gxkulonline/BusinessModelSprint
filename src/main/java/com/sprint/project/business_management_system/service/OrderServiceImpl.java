@@ -19,6 +19,10 @@ public class OrderServiceImpl implements OrderService{
         return orderRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
+    
+    public Order createOrder(Order order) {
+        return orderRepo.save(order);
+    }
 
     // Get orders by status
     public List<Order> getOrdersByStatus(String status) {

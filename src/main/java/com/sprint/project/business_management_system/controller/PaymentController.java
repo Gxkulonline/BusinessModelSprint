@@ -15,6 +15,11 @@ public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
+    
+    @PostMapping
+    public Payment createPayment(@RequestBody Payment payment) {
+        return paymentService.createPayment(payment);
+    }
 
     // Get all payments
     @GetMapping

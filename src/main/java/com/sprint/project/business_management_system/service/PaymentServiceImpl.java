@@ -15,6 +15,11 @@ public class PaymentServiceImpl implements PaymentService{
     public List<Payment> getAllPayments() {
         return repo.findAll();
     }
+    
+    public Payment createPayment(Payment payment) {
+        return repo.save(payment);
+    }
+    
     public List<Payment> getPaymentsByCustomer(Integer customerId) {
         return repo.findByCustomerCustomerNumber(customerId);
     }
