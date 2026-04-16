@@ -10,9 +10,11 @@ public class GlobalExceptionHandler {
 
 
     // Resource Not Found
+	
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleNotFound(ResourceNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        
     }
 
     // Duplicate Resource
