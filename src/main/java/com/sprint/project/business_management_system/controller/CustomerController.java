@@ -1,14 +1,18 @@
 package com.sprint.project.business_management_system.controller;
 
-
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.sprint.project.business_management_system.Entity.Customer;
-import com.sprint.project.business_management_system.repository.CustomerRepository;
+import com.sprint.project.business_management_system.service.CustomerService;
 
 import jakarta.validation.Valid;
 
@@ -17,24 +21,29 @@ import jakarta.validation.Valid;
 public class CustomerController {
 
     @Autowired
-    private CustomerRepository repo;
+    private CustomerService customerService;
 
+    // 1. Get all customers
     @GetMapping
-    public List<Customer> getAll() {
-        return repo.findAll();
+    public List<Customer> getAllCustomers() {
+        return customerService.getAllCustomers();
     }
 
+    // 2. Get customer by ID
     @GetMapping("/{id}")
-    public Customer getById(@PathVariable int id) {return repo.findById(id).orElse(null);
+    public Customer getCustomerById(@PathVariable Integer id) {
+        return customerService.getCustomerById(id);
     }
 
+    // 3. Save customer
     @PostMapping
-    public Customer save( @Valid @RequestBody Customer c) {
-        return repo.save(c);
+    public Customer saveCustomer(@Valid @RequestBody Customer customer) {
+        return customerService.saveCustomer(customer);
     }
 
+    // 4. Delete customer
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        repo.deleteById(id);
+    public void deleteCustomer(@PathVariable Integer id) {
+        customerService.deleteCustomer(id);
     }
 }
