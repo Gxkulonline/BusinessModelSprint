@@ -2,69 +2,26 @@ package com.sprint.project.business_management_system.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.sprint.project.business_management_system.Entity.Customer;
 import com.sprint.project.business_management_system.Entity.Employee;
 import com.sprint.project.business_management_system.Entity.Order;
-import com.sprint.project.business_management_system.repository.CustomerRepository;
-import com.sprint.project.business_management_system.repository.OrderRepository;
 
-@Service
-public class CustomerService {
+public interface CustomerService {
 
-    @Autowired
-    private CustomerRepository customerRepo;
+    List<Customer> getCustomersByCountry(String country);
 
-    @Autowired
-    private OrderRepository orderRepo;
+    List<Customer> getTopCustomers();
 
-    // 1. Get customers by country
-    public List<Customer> getCustomersByCountry(String country) {
+    List<Order> getOrdersByCustomer(Integer customerId);
 
-        if (country == null || country.isBlank()) {
-            throw new RuntimeException("Country cannot be empty");
-        }
+    List<Order> getOrdersByCustomerIdAndStatus(Integer customerId, String status);
 
-        return customerRepo.findByCountry(country);
-    }
+    Employee getCustomerSupport(Integer customerId);
+    List<Customer> getAllCustomers();
 
-    // 2. Get top customers (by credit limit)
-    public List<Customer> getTopCustomers() {
-        return customerRepo.findAllByOrderByCreditLimitDesc();
-    }
+    Customer getCustomerById(Integer id);
 
-    // 3. Get orders by customer
-    public List<Order> getOrdersByCustomer(Integer customerId) {
+    Customer saveCustomer(Customer customer);
 
-        Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-
-        return orderRepo.findByCustomer(customer);
-    }
-
-    // 4. Get orders by status
-    public List<Order> getOrdersByCustomerIdAndStatus(Integer customerId, String status) {
-
-        customerRepo.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-
-        return orderRepo.findByCustomerCustomerNumberAndStatus(customerId, status);
-    }
-
-    // 5. Get support (sales rep)
-    public Employee getCustomerSupport(Integer customerId) {
-
-        Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
-
-        Employee emp = customer.getSalesRep();
-
-        if (emp == null) {
-            throw new RuntimeException("No support assigned");
-        }
-
-        return emp;
-    }
+    void deleteCustomer(Integer id);
 }

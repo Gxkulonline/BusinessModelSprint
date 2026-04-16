@@ -4,10 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.sprint.project.business_management_system.Entity.Payment;
 import com.sprint.project.business_management_system.service.PaymentService;
@@ -17,23 +14,23 @@ import com.sprint.project.business_management_system.service.PaymentService;
 public class PaymentController {
 
     @Autowired
-    private PaymentService service;
+    private PaymentService paymentService;
 
-    // ✅ Get all payments
+    // Get all payments
     @GetMapping
     public List<Payment> getAll() {
-        return service.getAllPayments();
+        return paymentService.getAllPayments();
     }
 
-    // ✅ Get payments by customer
-    @GetMapping("/customer/{id}")
-    public List<Payment> getByCustomer(@PathVariable Integer id) {
-        return service.getPaymentsByCustomer(id);
+    // Get payments by customer
+    @GetMapping("/customer/{customerId}")
+    public List<Payment> getByCustomer(@PathVariable Integer customerId) {
+        return paymentService.getPaymentsByCustomer(customerId);
     }
 
-    // ✅ OPTIONAL (simple total amount)
-    @GetMapping("/total/{id}")
-    public BigDecimal getTotalAmount(@PathVariable Integer id) {
-        return service.getTotalAmountByCustomer(id);
+    // Get total payment amount by customer
+    @GetMapping("/customer/{customerId}/total")
+    public BigDecimal getTotal(@PathVariable Integer customerId) {
+        return paymentService.getTotalAmountByCustomer(customerId);
     }
 }
