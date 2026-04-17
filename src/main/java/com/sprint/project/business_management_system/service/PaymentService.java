@@ -3,13 +3,16 @@ package com.sprint.project.business_management_system.service;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.sprint.project.business_management_system.Entity.Payment;
+import com.sprint.project.business_management_system.requestDto.PaymentRequestDto;
+import com.sprint.project.business_management_system.responseDto.PaymentResponseDto;
 
 public interface PaymentService {
-	List<Payment> getAllPayments();
-	Payment createPayment(Payment payment);
 
-    List<Payment> getPaymentsByCustomer(Integer customerId);
+    List<PaymentResponseDto> getAllPayments();
+
+    PaymentResponseDto createPayment(PaymentRequestDto dto);
+
+    List<PaymentResponseDto> getPaymentsByCustomer(Integer customerId);
 
     BigDecimal getTotalAmountByCustomer(Integer customerId);
 }

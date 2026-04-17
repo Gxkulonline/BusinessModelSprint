@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.sprint.project.business_management_system.Entity.Order;
+import com.sprint.project.business_management_system.requestDto.OrderRequestDto;
+import com.sprint.project.business_management_system.responseDto.OrderResponseDto;
 import com.sprint.project.business_management_system.service.OrderService;
 
 @RestController
@@ -13,22 +15,20 @@ import com.sprint.project.business_management_system.service.OrderService;
 public class OrderController {
 
     @Autowired
-    private OrderService orderService;   // ✅ use interface
-    
+    private OrderService service;
+
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.createOrder(order);
+    public OrderResponseDto create(@RequestBody OrderRequestDto dto) {
+        return service.createOrder(dto);
     }
 
-    // Get order with details by ID
     @GetMapping("/{id}")
-    public Order getOrderWithDetails(@PathVariable Integer id) {
-        return orderService.getOrderWithDetails(id);
+    public OrderResponseDto getById(@PathVariable Integer id) {
+        return service.getOrderById(id);
     }
 
-    // Get orders by status
     @GetMapping
-    public List<Order> getOrdersByStatus(@RequestParam String status) {
-        return orderService.getOrdersByStatus(status);
+    public List<OrderResponseDto> getByStatus(@RequestParam String status) {
+        return service.getOrdersByStatus(status);
     }
 }
