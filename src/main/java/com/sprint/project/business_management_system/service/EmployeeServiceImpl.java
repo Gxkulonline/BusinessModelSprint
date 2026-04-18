@@ -6,12 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
 import com.sprint.project.business_management_system.entity.Employee;
-=======
-import com.sprint.project.business_management_system.Entity.Employee;
-import com.sprint.project.business_management_system.Entity.Office;
->>>>>>> refs/heads/master
+import com.sprint.project.business_management_system.entity.Office;
 import com.sprint.project.business_management_system.repository.EmployeeRepository;
 import com.sprint.project.business_management_system.repository.OfficeRepository;
 import com.sprint.project.business_management_system.requestDto.EmployeeRequestDto;

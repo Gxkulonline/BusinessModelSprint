@@ -5,13 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
+import com.sprint.project.business_management_system.entity.Customer;
 import com.sprint.project.business_management_system.entity.Order;
-=======
-import com.sprint.project.business_management_system.Entity.Customer;
-import com.sprint.project.business_management_system.Entity.Order;
 import com.sprint.project.business_management_system.repository.CustomerRepository;
->>>>>>> refs/heads/master
 import com.sprint.project.business_management_system.repository.OrderRepository;
 import com.sprint.project.business_management_system.requestDto.OrderRequestDto;
 import com.sprint.project.business_management_system.responseDto.OrderResponseDto;
