@@ -1,12 +1,19 @@
 package com.sprint.project.business_management_system.service;
 
 import java.util.List;
+<<<<<<< HEAD
 
 import com.sprint.project.business_management_system.entity.Order;
+=======
+import com.sprint.project.business_management_system.requestDto.OrderRequestDto;
+import com.sprint.project.business_management_system.responseDto.OrderResponseDto;
+>>>>>>> refs/heads/master
 
 public interface OrderService {
-	 Order getOrderWithDetails(Integer id);
-	 Order createOrder(Order order);
 
-	    List<Order> getOrdersByStatus(String status);
+    OrderResponseDto createOrder(OrderRequestDto dto);
+
+    OrderResponseDto getOrderById(Integer id);
+
+    List<OrderResponseDto> getOrdersByStatus(String status);
 }

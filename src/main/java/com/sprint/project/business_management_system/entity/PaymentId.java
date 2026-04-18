@@ -1,23 +1,14 @@
-package com.sprint.project.business_management_system.entity;
+package com.sprint.project.business_management_system.Entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-
+import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class PaymentId implements Serializable {
 
-    @NotNull(message = "Customer number is required")
-    @Column(name = "customerNumber")
     private Integer customerNumber;
-
-    @NotBlank(message = "Check number cannot be empty")
-    @Column(name = "checkNumber")
     private String checkNumber;
-
-    // ===== GETTERS & SETTERS =====
 
     public Integer getCustomerNumber() {
         return customerNumber;
@@ -35,16 +26,13 @@ public class PaymentId implements Serializable {
         this.checkNumber = checkNumber;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof PaymentId)) return false;
         PaymentId that = (PaymentId) o;
-
-        return Objects.equals(customerNumber, that.customerNumber) &&
-               Objects.equals(checkNumber, that.checkNumber);
+        return Objects.equals(customerNumber, that.customerNumber)
+                && Objects.equals(checkNumber, that.checkNumber);
     }
 
     @Override
