@@ -155,4 +155,29 @@ class EmployeeTest {
         assertEquals("Doe", result.getLastName());
         assertEquals("Manager", result.getJobTitle());
     }
+ // 11. Save employee without manager
+    @Test
+    void testSaveEmployeeWithoutManager() {
+        when(officeRepo.findById("OF1")).thenReturn(Optional.of(office));
+        when(employeeRepo.save(any())).thenReturn(employee);
+
+        assertNotNull(service.save(dto));
+    }
+
+    // 12. GetAll mapping validation
+    @Test
+    void testEmployeeMapping() {
+        when(employeeRepo.findAll()).thenReturn(List.of(employee));
+
+        assertEquals("John", service.getAll().get(0).getFirstName());
+    }
+
+    // 13. Verify findAll called once
+    @Test
+    void testEmployeeFindAllVerify() {
+        when(employeeRepo.findAll()).thenReturn(List.of(employee));
+
+        service.getAll();
+        verify(employeeRepo, times(1)).findAll();
+    }
 }

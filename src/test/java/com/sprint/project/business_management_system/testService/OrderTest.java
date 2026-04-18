@@ -153,4 +153,30 @@ class OrderTest {
 
         assertDoesNotThrow(() -> service.createOrder(dto));
     }
+ // 11. Multiple orders by status
+    @Test
+    void testMultipleOrdersByStatus() {
+        when(orderRepo.findByStatus("Shipped"))
+                .thenReturn(List.of(order, order));
+
+        assertEquals(2, service.getOrdersByStatus("Shipped").size());
+    }
+
+    // 12. Null status check
+    @Test
+    void testNullStatusHandling() {
+        when(orderRepo.findByStatus(null))
+                .thenReturn(new ArrayList<>());
+
+        assertTrue(service.getOrdersByStatus(null).isEmpty());
+    }
+
+    // 13. Verify findById call
+    @Test
+    void testGetOrderVerify() {
+        when(orderRepo.findById(1001)).thenReturn(Optional.of(order));
+
+        service.getOrderById(1001);
+        verify(orderRepo).findById(1001);
+    }
 }

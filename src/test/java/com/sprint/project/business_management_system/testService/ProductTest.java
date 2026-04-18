@@ -132,4 +132,31 @@ class ProductTest {
         assertEquals(new BigDecimal("1000"), result.getBuyPrice());
         assertEquals(new BigDecimal("1500"), result.getMsrp());
     }
+ // 11. Multiple products by productLine
+    @Test
+    void testMultipleProductsByLine() {
+        when(repo.findByProductLine_ProductLine("Classic Cars"))
+                .thenReturn(List.of(product, product));
+
+        assertEquals(2,
+            service.getProductsByProductLine("Classic Cars").size());
+    }
+
+    // 12. Verify findAll called
+    @Test
+    void testProductFindAllVerify() {
+        when(repo.findAll()).thenReturn(List.of(product));
+
+        service.getAllProducts();
+        verify(repo).findAll();
+    }
+
+    // 13. Null productLine handling
+    @Test
+    void testNullProductLine() {
+        when(repo.findByProductLine_ProductLine(null))
+                .thenReturn(new ArrayList<>());
+
+        assertTrue(service.getProductsByProductLine(null).isEmpty());
+    }
 }

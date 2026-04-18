@@ -152,4 +152,39 @@ class PaymentTest {
         assertEquals(1, response.getCustomerNumber());
         assertEquals(new BigDecimal("5000"), response.getAmount());
     }
+ // 11. Multiple payments total calculation
+    @Test
+    void testMultiplePaymentTotal() {
+        Payment p2 = new Payment();
+        PaymentId id2 = new PaymentId();
+        id2.setCustomerNumber(1);
+        id2.setCheckNumber("CHK124");
+
+        p2.setPaymentId(id2);
+        p2.setAmount(new BigDecimal("3000"));
+
+        when(paymentRepo.findAll()).thenReturn(List.of(payment, p2));
+
+        assertEquals(new BigDecimal("8000"),
+            service.getTotalAmountByCustomer(1));
+    }
+
+    // 12. Verify findAll called
+    @Test
+    void testPaymentFindAllVerify() {
+        when(paymentRepo.findAll()).thenReturn(List.of(payment));
+
+        service.getAllPayments();
+        verify(paymentRepo).findAll();
+    }
+
+    // 13. Payment mapping date check
+    @Test
+    void testPaymentDateMapping() {
+        when(customerRepo.findById(1)).thenReturn(Optional.of(customer));
+        when(paymentRepo.save(any())).thenReturn(payment);
+
+        assertEquals(payment.getPaymentDate(),
+            service.createPayment(dto).getPaymentDate());
+    }
 }

@@ -139,4 +139,30 @@ class CustomerTest {
         doNothing().when(repo).deleteById(1);
         assertDoesNotThrow(() -> service.deleteCustomer(1));
     }
+ // 11. Save customer without SalesRep
+    @Test
+    void testSaveCustomerWithoutSalesRep() {
+        dto.setSalesRepEmployee(null);
+
+        when(repo.save(any())).thenReturn(customer);
+
+        assertNotNull(service.saveCustomer(dto));
+    }
+
+    // 12. GetAll mapping validation
+    @Test
+    void testGetAllCustomerMapping() {
+        when(repo.findAll()).thenReturn(List.of(customer));
+
+        assertEquals("ABC Pvt Ltd",
+            service.getAllCustomers().get(0).getCustomerName());
+    }
+
+    // 13. Delete non-existing ID (still no error)
+    @Test
+    void testDeleteNonExistingCustomer() {
+        doNothing().when(repo).deleteById(99);
+
+        assertDoesNotThrow(() -> service.deleteCustomer(99));
+    }
 }
