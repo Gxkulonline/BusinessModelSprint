@@ -1,19 +1,36 @@
 package com.sprint.project.business_management_system.requestDto;
 
+import jakarta.validation.constraints.*;
+
 public class EmployeeRequestDto {
 
+    @NotNull(message = "Employee number is required")
     private Integer employeeNumber;
+
+    @NotBlank(message = "First name cannot be empty")
     private String firstName;
+
+    @NotBlank(message = "Last name cannot be empty")
     private String lastName;
-    private String extension;
+
+    private String extension; // optional
+
+    @Email(message = "Invalid email format")
+    @NotBlank(message = "Email cannot be empty")
     private String email;
+
+    @NotBlank(message = "Job title cannot be empty")
     private String jobTitle;
 
+    @NotNull(message = "Office details are required")
     private OfficeDto office;
-    private Integer reportsTo;
+
+    private Integer reportsTo; // optional
 
     // ===== INNER DTO =====
     public static class OfficeDto {
+
+        @NotBlank(message = "Office code cannot be empty")
         private String officeCode;
 
         public String getOfficeCode() {

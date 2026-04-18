@@ -10,6 +10,8 @@ import com.sprint.project.business_management_system.requestDto.PaymentRequestDt
 import com.sprint.project.business_management_system.responseDto.PaymentResponseDto;
 import com.sprint.project.business_management_system.service.PaymentService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
@@ -18,9 +20,10 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @PostMapping
-    public PaymentResponseDto createPayment(@RequestBody PaymentRequestDto payment) {
+    public PaymentResponseDto createPayment(@Valid @RequestBody PaymentRequestDto payment) {
         return paymentService.createPayment(payment);
     }
+
     @GetMapping
     public List<PaymentResponseDto> getAll() {
         return paymentService.getAllPayments();
