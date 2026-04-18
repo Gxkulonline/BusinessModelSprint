@@ -5,10 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.sprint.project.business_management_system.Entity.Order;
 import com.sprint.project.business_management_system.requestDto.OrderRequestDto;
 import com.sprint.project.business_management_system.responseDto.OrderResponseDto;
 import com.sprint.project.business_management_system.service.OrderService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/orders")
@@ -18,7 +19,7 @@ public class OrderController {
     private OrderService service;
 
     @PostMapping
-    public OrderResponseDto create(@RequestBody OrderRequestDto dto) {
+    public OrderResponseDto create(@Valid @RequestBody OrderRequestDto dto) {
         return service.createOrder(dto);
     }
 

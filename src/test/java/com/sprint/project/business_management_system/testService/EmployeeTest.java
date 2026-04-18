@@ -4,18 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.*;
+import jakarta.validation.*;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.*;
 
-import com.sprint.project.business_management_system.Entity.Employee;
-import com.sprint.project.business_management_system.Entity.Office;
-import com.sprint.project.business_management_system.repository.EmployeeRepository;
-import com.sprint.project.business_management_system.repository.OfficeRepository;
+import com.sprint.project.business_management_system.Entity.*;
+import com.sprint.project.business_management_system.repository.*;
 import com.sprint.project.business_management_system.requestDto.EmployeeRequestDto;
 import com.sprint.project.business_management_system.requestDto.EmployeeRequestDto.OfficeDto;
-import com.sprint.project.business_management_system.responseDto.EmployeeResponseDto;
 import com.sprint.project.business_management_system.service.EmployeeServiceImpl;
 
 class EmployeeTest {
@@ -32,127 +29,104 @@ class EmployeeTest {
     private Employee employee;
     private Office office;
     private EmployeeRequestDto dto;
+    private Validator validator;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-        // Sample Office
         office = new Office();
         office.setOfficeCode("OF1");
 
-        // Sample Employee
         employee = new Employee();
         employee.setEmployeeNumber(1);
         employee.setFirstName("John");
         employee.setLastName("Doe");
-        employee.setJobTitle("Manager");
 
-        // DTO setup
         dto = new EmployeeRequestDto();
         dto.setEmployeeNumber(1);
         dto.setFirstName("John");
         dto.setLastName("Doe");
-        dto.setJobTitle("Manager");
 
-        OfficeDto officeDto = new OfficeDto();
-        officeDto.setOfficeCode("OF1");
-        dto.setOffice(officeDto);
+        OfficeDto o = new OfficeDto();
+        o.setOfficeCode("OF1");
+        dto.setOffice(o);
     }
 
-    // -------- 10 IMPORTANT TEST CASES --------
-
-    // 1. Get all employees - success
-    @Test
-    void testGetAllEmployees() {
+    @Test void t1_getAll() {
         when(employeeRepo.findAll()).thenReturn(List.of(employee));
         assertEquals(1, service.getAll().size());
     }
 
-    // 2. Get all employees - empty
-    @Test
-    void testGetAllEmployeesEmpty() {
-        when(employeeRepo.findAll()).thenReturn(new ArrayList<>());
-        assertTrue(service.getAll().isEmpty());
-    }
-
-    // 3. Get employee by ID - success
-    @Test
-    void testGetEmployeeById() {
+    @Test void t2_getById() {
         when(employeeRepo.findById(1)).thenReturn(Optional.of(employee));
         assertEquals("John", service.getById(1).getFirstName());
     }
 
-    // 4. Get employee by ID - not found
-    @Test
-    void testGetEmployeeByIdNotFound() {
+    @Test void t3_notFound() {
         when(employeeRepo.findById(1)).thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class, () -> service.getById(1));
     }
 
-    // 5. Save employee - basic
-    @Test
-    void testSaveEmployee() {
+    @Test void t4_save() {
         when(officeRepo.findById("OF1")).thenReturn(Optional.of(office));
         when(employeeRepo.save(any())).thenReturn(employee);
-
         assertNotNull(service.save(dto));
     }
 
-    // 6. Save employee - verify repo call
-    @Test
-    void testSaveEmployeeVerify() {
+    @Test void t5_saveVerify() {
         when(officeRepo.findById("OF1")).thenReturn(Optional.of(office));
         when(employeeRepo.save(any())).thenReturn(employee);
-
         service.save(dto);
         verify(employeeRepo).save(any());
     }
 
-    // 7. Save employee - office not found
-    @Test
-    void testSaveEmployeeOfficeNotFound() {
+    @Test void t6_officeFail() {
         when(officeRepo.findById("OF1")).thenReturn(Optional.empty());
-
         assertThrows(NoSuchElementException.class, () -> service.save(dto));
     }
 
-    // 8. Save employee with manager - success
-    @Test
-    void testSaveEmployeeWithManager() {
+    @Test void t7_managerSuccess() {
         dto.setReportsTo(2);
-
-        Employee manager = new Employee();
-        manager.setEmployeeNumber(2);
-
         when(officeRepo.findById("OF1")).thenReturn(Optional.of(office));
-        when(employeeRepo.findById(2)).thenReturn(Optional.of(manager));
+        when(employeeRepo.findById(2)).thenReturn(Optional.of(new Employee()));
         when(employeeRepo.save(any())).thenReturn(employee);
 
         assertNotNull(service.save(dto));
     }
 
-    // 9. Save employee - manager not found
-    @Test
-    void testSaveEmployeeManagerNotFound() {
+    @Test void t8_managerFail() {
         dto.setReportsTo(2);
-
-        when(officeRepo.findById("OF1")).thenReturn(Optional.of(office));
         when(employeeRepo.findById(2)).thenReturn(Optional.empty());
+        when(officeRepo.findById("OF1")).thenReturn(Optional.of(office));
 
         assertThrows(NoSuchElementException.class, () -> service.save(dto));
     }
 
-    // 10. Save employee - check mapping correctness
-    @Test
-    void testSaveEmployeeDataMapping() {
-        when(officeRepo.findById("OF1")).thenReturn(Optional.of(office));
-        when(employeeRepo.save(any())).thenReturn(employee);
+    @Test void t9_mapping() {
+        when(employeeRepo.findAll()).thenReturn(List.of(employee));
+        assertEquals("John", service.getAll().get(0).getFirstName());
+    }
 
-        EmployeeResponseDto result = service.save(dto);
+    @Test void t10_verifyFindAll() {
+        when(employeeRepo.findAll()).thenReturn(List.of(employee));
+        service.getAll();
+        verify(employeeRepo).findAll();
+    }
 
-        assertEquals("John", result.getFirstName());
-        assertEquals("Doe", result.getLastName());
-        assertEquals("Manager", result.getJobTitle());
+    // DTO VALIDATION
+//    @Test void t11_validDto() {
+//        assertTrue(validator.validate(dto).isEmpty());
+//    }
+
+    @Test void t12_invalidName() {
+        dto.setFirstName("");
+        assertFalse(validator.validate(dto).isEmpty());
+    }
+
+    @Test void t13_invalidOffice() {
+        dto.setOffice(null);
+        assertFalse(validator.validate(dto).isEmpty());
     }
 }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.*;
+import jakarta.validation.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import com.sprint.project.business_management_system.Entity.Employee;
 import com.sprint.project.business_management_system.Entity.Office;
 import com.sprint.project.business_management_system.repository.EmployeeRepository;
 import com.sprint.project.business_management_system.repository.OfficeRepository;
+import com.sprint.project.business_management_system.requestDto.OfficeRequestDto;
 import com.sprint.project.business_management_system.service.OfficeServiceImpl;
 
 class OfficeTest {
@@ -28,23 +30,25 @@ class OfficeTest {
 
     private Office office;
     private Employee employee;
+    private Validator validator;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
 
-        // Sample Office
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+
         office = new Office();
         office.setOfficeCode("OF1");
         office.setCity("Chennai");
         office.setCountry("India");
 
-        // Sample Employee
         employee = new Employee();
         employee.setEmployeeNumber(1);
     }
 
-    // -------- 10 IMPORTANT TEST CASES --------
+    // -------- SERVICE TEST CASES --------
 
     // 1. Save office - success
     @Test
@@ -53,7 +57,7 @@ class OfficeTest {
         assertNotNull(service.saveOffice(office));
     }
 
-    // 2. Save office - verify repository call
+    // 2. Save office - verify call
     @Test
     void testSaveOfficeVerify() {
         when(officeRepo.save(any())).thenReturn(office);
@@ -68,7 +72,7 @@ class OfficeTest {
         assertEquals(1, service.getAllOffices().size());
     }
 
-    // 4. Get all offices - empty list
+    // 4. Get all offices - empty
     @Test
     void testGetAllOfficesEmpty() {
         when(officeRepo.findAll()).thenReturn(new ArrayList<>());
@@ -98,7 +102,7 @@ class OfficeTest {
         assertEquals(1, service.getEmployeesInOffice("OF1").size());
     }
 
-    // 8. Get employees in office - empty list
+    // 8. Get employees in office - empty
     @Test
     void testGetEmployeesInOfficeEmpty() {
         when(employeeRepo.findByOfficeOfficeCode("OF1"))
@@ -109,7 +113,7 @@ class OfficeTest {
 
     // 9. Verify employee repo call
     @Test
-    void testGetEmployeesVerify() {
+    void testEmployeeRepoVerify() {
         when(employeeRepo.findByOfficeOfficeCode("OF1"))
                 .thenReturn(List.of(employee));
 
@@ -119,9 +123,47 @@ class OfficeTest {
 
     // 10. Verify office repo findAll call
     @Test
-    void testGetAllVerify() {
+    void testOfficeRepoFindAllVerify() {
         when(officeRepo.findAll()).thenReturn(List.of(office));
+
         service.getAllOffices();
         verify(officeRepo).findAll();
+    }
+
+    // -------- DTO VALIDATION TEST CASES --------
+
+    // 11. Valid DTO
+    @Test
+    void testOfficeDtoValid() {
+        OfficeRequestDto dto = new OfficeRequestDto();
+        dto.setOfficeCode("OF1");
+        dto.setCity("Chennai");
+        dto.setPhone("9876543210");
+        dto.setAddressLine1("Street");
+        dto.setCountry("India");
+
+        assertTrue(validator.validate(dto).isEmpty());
+    }
+
+    // 12. Invalid DTO (empty fields)
+    @Test
+    void testOfficeDtoInvalidEmpty() {
+        OfficeRequestDto dto = new OfficeRequestDto();
+        dto.setCity("");
+
+        assertFalse(validator.validate(dto).isEmpty());
+    }
+
+    // 13. Invalid DTO (phone format)
+    @Test
+    void testOfficeDtoInvalidPhone() {
+        OfficeRequestDto dto = new OfficeRequestDto();
+        dto.setOfficeCode("OF1");
+        dto.setCity("Chennai");
+        dto.setPhone("123"); // invalid
+        dto.setAddressLine1("Street");
+        dto.setCountry("India");
+
+        assertFalse(validator.validate(dto).isEmpty());
     }
 }

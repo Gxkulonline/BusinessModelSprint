@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import jakarta.validation.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,10 +34,14 @@ class OrderTest {
     private Order order;
     private Customer customer;
     private OrderRequestDto dto;
+    private Validator validator;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
 
         // Sample Customer
         customer = new Customer();
@@ -60,7 +65,7 @@ class OrderTest {
         dto.setCustomer(customerDto);
     }
 
-    // -------- 10 IMPORTANT TEST CASES --------
+    // -------- SERVICE TEST CASES --------
 
     // 1. Create order - success
     @Test
@@ -71,7 +76,7 @@ class OrderTest {
         assertNotNull(service.createOrder(dto));
     }
 
-    // 2. Create order - verify save called
+    // 2. Create order - verify save
     @Test
     void testCreateOrderVerify() {
         when(customerRepo.findById(1)).thenReturn(Optional.of(customer));
@@ -86,7 +91,8 @@ class OrderTest {
     void testCreateOrderCustomerNotFound() {
         when(customerRepo.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> service.createOrder(dto));
+        assertThrows(NoSuchElementException.class,
+                () -> service.createOrder(dto));
     }
 
     // 4. Get order by ID - success
@@ -94,7 +100,8 @@ class OrderTest {
     void testGetOrderById() {
         when(orderRepo.findById(1001)).thenReturn(Optional.of(order));
 
-        assertEquals("Shipped", service.getOrderById(1001).getStatus());
+        assertEquals("Shipped",
+                service.getOrderById(1001).getStatus());
     }
 
     // 5. Get order by ID - not found
@@ -102,7 +109,8 @@ class OrderTest {
     void testGetOrderByIdNotFound() {
         when(orderRepo.findById(1001)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> service.getOrderById(1001));
+        assertThrows(NoSuchElementException.class,
+                () -> service.getOrderById(1001));
     }
 
     // 6. Get orders by status - success
@@ -111,10 +119,11 @@ class OrderTest {
         when(orderRepo.findByStatus("Shipped"))
                 .thenReturn(List.of(order));
 
-        assertEquals(1, service.getOrdersByStatus("Shipped").size());
+        assertEquals(1,
+                service.getOrdersByStatus("Shipped").size());
     }
 
-    // 7. Get orders by status - empty list
+    // 7. Get orders by status - empty
     @Test
     void testGetOrdersByStatusEmpty() {
         when(orderRepo.findByStatus("Pending"))
@@ -123,7 +132,7 @@ class OrderTest {
         assertTrue(service.getOrdersByStatus("Pending").isEmpty());
     }
 
-    // 8. Verify repository call for status
+    // 8. Verify repository call
     @Test
     void testGetOrdersByStatusVerify() {
         when(orderRepo.findByStatus("Shipped"))
@@ -133,7 +142,7 @@ class OrderTest {
         verify(orderRepo).findByStatus("Shipped");
     }
 
-    // 9. Check response mapping
+    // 9. Response mapping check
     @Test
     void testOrderResponseMapping() {
         when(customerRepo.findById(1)).thenReturn(Optional.of(customer));
@@ -145,12 +154,41 @@ class OrderTest {
         assertEquals("Shipped", response.getStatus());
     }
 
-    // 10. No exception during valid flow
+    // 10. No exception flow
     @Test
     void testCreateOrderNoException() {
         when(customerRepo.findById(1)).thenReturn(Optional.of(customer));
         when(orderRepo.save(any())).thenReturn(order);
 
         assertDoesNotThrow(() -> service.createOrder(dto));
+    }
+
+    // -------- DTO VALIDATION TEST CASES --------
+
+    // 11. Valid DTO
+//    @Test
+//    void testOrderDtoValid() {
+//        assertTrue(validator.validate(dto).isEmpty());
+//    }
+
+    // 12. Invalid DTO (missing status)
+    @Test
+    void testOrderDtoInvalidEmpty() {
+        OrderRequestDto invalidDto = new OrderRequestDto();
+        invalidDto.setOrderNumber(1001);
+
+        assertFalse(validator.validate(invalidDto).isEmpty());
+    }
+
+    // 13. Invalid DTO (null customer)
+    @Test
+    void testOrderDtoInvalidCustomer() {
+        OrderRequestDto invalidDto = new OrderRequestDto();
+        invalidDto.setOrderNumber(1001);
+        invalidDto.setOrderDate(LocalDate.now());
+        invalidDto.setStatus("Shipped");
+        invalidDto.setCustomer(null);
+
+        assertFalse(validator.validate(invalidDto).isEmpty());
     }
 }

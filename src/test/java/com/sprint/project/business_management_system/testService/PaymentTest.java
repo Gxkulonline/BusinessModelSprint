@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+import jakarta.validation.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,10 +35,14 @@ class PaymentTest {
     private Customer customer;
     private Payment payment;
     private PaymentRequestDto dto;
+    private Validator validator;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
 
         // Sample Customer
         customer = new Customer();
@@ -63,7 +68,7 @@ class PaymentTest {
         dto.setAmount(new BigDecimal("5000"));
     }
 
-    // -------- 10 IMPORTANT TEST CASES --------
+    // -------- SERVICE TEST CASES --------
 
     // 1. Create payment - success
     @Test
@@ -96,7 +101,6 @@ class PaymentTest {
     @Test
     void testGetAllPayments() {
         when(paymentRepo.findAll()).thenReturn(List.of(payment));
-
         assertEquals(1, service.getAllPayments().size());
     }
 
@@ -104,7 +108,6 @@ class PaymentTest {
     @Test
     void testGetAllPaymentsEmpty() {
         when(paymentRepo.findAll()).thenReturn(new ArrayList<>());
-
         assertTrue(service.getAllPayments().isEmpty());
     }
 
@@ -112,7 +115,6 @@ class PaymentTest {
     @Test
     void testGetPaymentsByCustomer() {
         when(paymentRepo.findAll()).thenReturn(List.of(payment));
-
         assertEquals(1, service.getPaymentsByCustomer(1).size());
     }
 
@@ -120,7 +122,6 @@ class PaymentTest {
     @Test
     void testGetPaymentsByCustomerNoMatch() {
         when(paymentRepo.findAll()).thenReturn(List.of(payment));
-
         assertTrue(service.getPaymentsByCustomer(2).isEmpty());
     }
 
@@ -128,7 +129,6 @@ class PaymentTest {
     @Test
     void testGetTotalAmount() {
         when(paymentRepo.findAll()).thenReturn(List.of(payment));
-
         assertEquals(new BigDecimal("5000"), service.getTotalAmountByCustomer(1));
     }
 
@@ -136,7 +136,6 @@ class PaymentTest {
     @Test
     void testGetTotalAmountEmpty() {
         when(paymentRepo.findAll()).thenReturn(new ArrayList<>());
-
         assertEquals(BigDecimal.ZERO, service.getTotalAmountByCustomer(1));
     }
 
@@ -151,5 +150,27 @@ class PaymentTest {
         assertEquals("CHK123", response.getCheckNumber());
         assertEquals(1, response.getCustomerNumber());
         assertEquals(new BigDecimal("5000"), response.getAmount());
+    }
+
+    // -------- DTO VALIDATION TEST CASES --------
+
+    // 11. Valid DTO
+    @Test
+    void testPaymentDtoValid() {
+        assertTrue(validator.validate(dto).isEmpty());
+    }
+
+    // 12. Invalid DTO (negative amount)
+    @Test
+    void testPaymentDtoInvalidAmount() {
+        dto.setAmount(new BigDecimal("-100"));
+        assertFalse(validator.validate(dto).isEmpty());
+    }
+
+    // 13. Invalid DTO (empty check number)
+    @Test
+    void testPaymentDtoInvalidCheckNumber() {
+        dto.setCheckNumber("");
+        assertFalse(validator.validate(dto).isEmpty());
     }
 }

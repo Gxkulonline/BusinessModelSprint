@@ -2,19 +2,37 @@ package com.sprint.project.business_management_system.requestDto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+
 public class OrderRequestDto {
 
+    @NotNull(message = "Order number is required")
     private Integer orderNumber;
+
+    @NotNull(message = "Order date is required")
     private LocalDate orderDate;
+
+    @NotNull(message = "Required date is required")
     private LocalDate requiredDate;
+
+    // Optional
     private LocalDate shippedDate;
+
+    @NotBlank(message = "Status cannot be empty")
     private String status;
+
+    // Optional
     private String comments;
 
+    @NotNull(message = "Customer is required")
+    @Valid
     private CustomerDto customer;
 
     // ===== INNER DTO =====
     public static class CustomerDto {
+
+        @NotNull(message = "Customer number is required")
         private Integer customerNumber;
 
         public Integer getCustomerNumber() {

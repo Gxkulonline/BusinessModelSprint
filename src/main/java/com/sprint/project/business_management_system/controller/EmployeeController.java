@@ -8,6 +8,8 @@ import com.sprint.project.business_management_system.requestDto.EmployeeRequestD
 import com.sprint.project.business_management_system.responseDto.EmployeeResponseDto;
 import com.sprint.project.business_management_system.service.EmployeeService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -26,7 +28,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public EmployeeResponseDto save(@RequestBody EmployeeRequestDto dto) {
+    public EmployeeResponseDto save(@Valid @RequestBody EmployeeRequestDto dto) {
         return service.save(dto);
     }
 }
