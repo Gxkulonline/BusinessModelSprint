@@ -1,7 +1,7 @@
 package com.sprint.project.business_management_system.controller;
 
 
-import com.sprint.project.business_management_system.Entity.ProductLine;
+import com.sprint.project.business_management_system.entity.ProductLine;
 import com.sprint.project.business_management_system.repository.ProductLineRepository;
 
 import jakarta.validation.Valid;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/productlines")
+@CrossOrigin(origins = "*")
 public class ProductLineController {
 
     @Autowired

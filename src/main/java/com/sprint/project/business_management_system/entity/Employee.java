@@ -1,4 +1,4 @@
-package com.sprint.project.business_management_system.Entity;
+package com.sprint.project.business_management_system.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -7,7 +7,6 @@ import java.util.List;
 @Entity
 @Table(name = "employees")
 public class Employee {
-
     @Id
     @NotNull(message = "Employee number is required")
     @Column(name = "employeeNumber")
@@ -46,8 +45,8 @@ public class Employee {
     @Column(name = "jobTitle")
     private String jobTitle;
 
-    // ===== GETTERS & SETTERS =====
-
+    
+//g&s
     public Integer getEmployeeNumber() {
         return employeeNumber;
     }

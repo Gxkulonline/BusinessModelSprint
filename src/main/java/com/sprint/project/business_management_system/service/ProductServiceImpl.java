@@ -32,7 +32,8 @@ package com.sprint.project.business_management_system.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.sprint.project.business_management_system.Entity.Product;
+
+import com.sprint.project.business_management_system.entity.Product;
 import com.sprint.project.business_management_system.repository.ProductRepository;
 
 @Service

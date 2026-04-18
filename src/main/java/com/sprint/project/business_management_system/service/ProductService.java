@@ -16,7 +16,7 @@ package com.sprint.project.business_management_system.service;
 
 import java.util.List;
 
-import com.sprint.project.business_management_system.Entity.Product;
+import com.sprint.project.business_management_system.entity.Product;
 
 public interface ProductService {
     List<Product> getAllProducts();

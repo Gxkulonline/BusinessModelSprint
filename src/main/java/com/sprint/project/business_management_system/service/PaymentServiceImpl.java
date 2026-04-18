@@ -3,7 +3,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.sprint.project.business_management_system.Entity.Payment;
+
+import com.sprint.project.business_management_system.entity.Payment;
 import com.sprint.project.business_management_system.repository.CustomerRepository;
 import com.sprint.project.business_management_system.repository.PaymentRepository;
 @Service

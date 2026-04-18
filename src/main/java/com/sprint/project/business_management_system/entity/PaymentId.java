@@ -1,4 +1,4 @@
-package com.sprint.project.business_management_system.Entity;
+package com.sprint.project.business_management_system.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

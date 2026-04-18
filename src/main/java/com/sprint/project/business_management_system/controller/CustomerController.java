@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sprint.project.business_management_system.Entity.Customer;
+import com.sprint.project.business_management_system.entity.Customer;
 import com.sprint.project.business_management_system.service.CustomerService;
 
 import jakarta.validation.Valid;

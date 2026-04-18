@@ -3,7 +3,7 @@ package com.sprint.project.business_management_system.service;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.sprint.project.business_management_system.Entity.Payment;
+import com.sprint.project.business_management_system.entity.Payment;
 
 public interface PaymentService {
 	List<Payment> getAllPayments();

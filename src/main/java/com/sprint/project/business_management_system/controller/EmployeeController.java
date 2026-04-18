@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.sprint.project.business_management_system.Entity.Employee;
+import com.sprint.project.business_management_system.entity.Employee;
 import com.sprint.project.business_management_system.service.EmployeeService;
 
 @RestController
