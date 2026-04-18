@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.sprint.project.business_management_system.Entity.OrderDetail;
-import com.sprint.project.business_management_system.Entity.OrderDetailId;
+
+import com.sprint.project.business_management_system.entity.OrderDetail;
+import com.sprint.project.business_management_system.entity.OrderDetailId;
 import com.sprint.project.business_management_system.repository.OrderDetailRepository;
 import com.sprint.project.business_management_system.service.OrderDetailService;
 @RestController

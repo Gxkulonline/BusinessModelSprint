@@ -3,9 +3,14 @@ package com.sprint.project.business_management_system.controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+<<<<<<< HEAD
+
+import com.sprint.project.business_management_system.entity.Employee;
+=======
 import com.sprint.project.business_management_system.Entity.Employee;
 import com.sprint.project.business_management_system.requestDto.EmployeeRequestDto;
 import com.sprint.project.business_management_system.responseDto.EmployeeResponseDto;
+>>>>>>> refs/heads/master
 import com.sprint.project.business_management_system.service.EmployeeService;
 
 @RestController

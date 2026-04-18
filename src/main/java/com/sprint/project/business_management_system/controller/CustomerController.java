@@ -9,9 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+<<<<<<< HEAD
+
+import com.sprint.project.business_management_system.entity.Customer;
+=======
 import com.sprint.project.business_management_system.Entity.Customer;
 import com.sprint.project.business_management_system.requestDto.CustomerRequestDto;
 import com.sprint.project.business_management_system.responseDto.CustomerResponseDto;
+>>>>>>> refs/heads/master
 import com.sprint.project.business_management_system.service.CustomerService;
 import jakarta.validation.Valid;
 

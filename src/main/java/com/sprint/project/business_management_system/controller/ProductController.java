@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sprint.project.business_management_system.Entity.Product;
+import com.sprint.project.business_management_system.entity.Product;
 import com.sprint.project.business_management_system.service.ProductServiceImpl;
 
 @RestController

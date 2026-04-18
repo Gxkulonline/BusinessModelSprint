@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sprint.project.business_management_system.Entity.Employee;
-import com.sprint.project.business_management_system.Entity.Office;
+import com.sprint.project.business_management_system.entity.Employee;
+import com.sprint.project.business_management_system.entity.Office;
 
 public interface OfficeRepository extends JpaRepository<Office, String> {
 	

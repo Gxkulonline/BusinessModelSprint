@@ -6,8 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< HEAD
+import com.sprint.project.business_management_system.entity.Payment;
+=======
 import com.sprint.project.business_management_system.requestDto.PaymentRequestDto;
 import com.sprint.project.business_management_system.responseDto.PaymentResponseDto;
+>>>>>>> refs/heads/master
 import com.sprint.project.business_management_system.service.PaymentService;
 
 @RestController
