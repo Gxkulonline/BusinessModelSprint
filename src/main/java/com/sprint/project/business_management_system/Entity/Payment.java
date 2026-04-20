@@ -13,6 +13,7 @@ public class Payment {
 
     @ManyToOne
     @MapsId("customerNumber")
+    @JoinColumn(name = "customer_number")
     private Customer customer;
 
     @Column(name = "paymentDate", nullable = false)
