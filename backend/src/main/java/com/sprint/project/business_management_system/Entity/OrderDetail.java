@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "orderdetails")
 public class OrderDetail {
@@ -36,7 +38,7 @@ public class OrderDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("productCode")
     @JoinColumn(name = "productCode", referencedColumnName = "productCode")
-    @NotNull(message = "Product must be provided")
+    @JsonIgnore 
     private Product product;
 
     // ===== GETTERS & SETTERS =====

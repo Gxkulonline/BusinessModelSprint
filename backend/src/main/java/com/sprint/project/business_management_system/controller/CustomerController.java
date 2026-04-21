@@ -103,6 +103,7 @@ import com.sprint.project.business_management_system.service.CustomerService;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin(origins ="")
 @RequestMapping("/customers")
 public class CustomerController {
 
