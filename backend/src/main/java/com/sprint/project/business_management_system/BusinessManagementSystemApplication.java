@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BusinessManagementSystemApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BusinessManagementSystemApplication.class, args);
+		
+		
 	}
 }
  
