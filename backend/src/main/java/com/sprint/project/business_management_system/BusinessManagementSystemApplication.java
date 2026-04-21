@@ -9,6 +9,7 @@ public class BusinessManagementSystemApplication {
 		SpringApplication.run(BusinessManagementSystemApplication.class, args);
 		
 		
+		
 	}
 }
  
