@@ -1,4 +1,4 @@
-package com.sprint.project.business_management_system.service;
+package com.sprint.project.business_management_system.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +12,7 @@ import com.sprint.project.business_management_system.repository.CustomerReposito
 import com.sprint.project.business_management_system.repository.EmployeeRepository;
 import com.sprint.project.business_management_system.requestDto.CustomerRequestDto;
 import com.sprint.project.business_management_system.responseDto.CustomerResponseDto;
+import com.sprint.project.business_management_system.service.CustomerService;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {

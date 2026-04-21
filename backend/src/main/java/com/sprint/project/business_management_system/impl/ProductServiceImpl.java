@@ -27,13 +27,14 @@
 //    }
 //}
 
-package com.sprint.project.business_management_system.service;
+package com.sprint.project.business_management_system.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sprint.project.business_management_system.Entity.Product;
 import com.sprint.project.business_management_system.repository.ProductRepository;
+import com.sprint.project.business_management_system.service.ProductService;
 
 @Service
 public class ProductServiceImpl implements ProductService {

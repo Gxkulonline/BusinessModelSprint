@@ -15,11 +15,11 @@ import org.mockito.*;
 import com.sprint.project.business_management_system.Entity.Customer;
 import com.sprint.project.business_management_system.Entity.Payment;
 import com.sprint.project.business_management_system.Entity.PaymentId;
+import com.sprint.project.business_management_system.impl.PaymentServiceImpl;
 import com.sprint.project.business_management_system.repository.CustomerRepository;
 import com.sprint.project.business_management_system.repository.PaymentRepository;
 import com.sprint.project.business_management_system.requestDto.PaymentRequestDto;
 import com.sprint.project.business_management_system.responseDto.PaymentResponseDto;
-import com.sprint.project.business_management_system.service.PaymentServiceImpl;
 
 class PaymentTest {
 

@@ -12,10 +12,10 @@ import org.mockito.*;
 
 import com.sprint.project.business_management_system.Entity.Employee;
 import com.sprint.project.business_management_system.Entity.Office;
+import com.sprint.project.business_management_system.impl.OfficeServiceImpl;
 import com.sprint.project.business_management_system.repository.EmployeeRepository;
 import com.sprint.project.business_management_system.repository.OfficeRepository;
 import com.sprint.project.business_management_system.requestDto.OfficeRequestDto;
-import com.sprint.project.business_management_system.service.OfficeServiceImpl;
 
 class OfficeTest {
 

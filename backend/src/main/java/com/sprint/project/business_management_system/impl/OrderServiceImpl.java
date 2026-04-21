@@ -1,4 +1,4 @@
-package com.sprint.project.business_management_system.service;
+package com.sprint.project.business_management_system.impl;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import com.sprint.project.business_management_system.repository.CustomerReposito
 import com.sprint.project.business_management_system.repository.OrderRepository;
 import com.sprint.project.business_management_system.requestDto.OrderRequestDto;
 import com.sprint.project.business_management_system.responseDto.OrderResponseDto;
+import com.sprint.project.business_management_system.service.OrderService;
 
 @Service
 public class OrderServiceImpl implements OrderService {

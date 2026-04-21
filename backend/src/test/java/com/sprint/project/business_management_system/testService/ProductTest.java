@@ -12,8 +12,8 @@ import org.mockito.*;
 
 import com.sprint.project.business_management_system.Entity.Product;
 import com.sprint.project.business_management_system.Entity.ProductLine;
+import com.sprint.project.business_management_system.impl.ProductServiceImpl;
 import com.sprint.project.business_management_system.repository.ProductRepository;
-import com.sprint.project.business_management_system.service.ProductServiceImpl;
 
 class ProductTest {
 

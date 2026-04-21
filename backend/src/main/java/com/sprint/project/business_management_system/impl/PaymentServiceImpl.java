@@ -1,4 +1,4 @@
-package com.sprint.project.business_management_system.service;
+package com.sprint.project.business_management_system.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,6 +14,7 @@ import com.sprint.project.business_management_system.repository.CustomerReposito
 import com.sprint.project.business_management_system.repository.PaymentRepository;
 import com.sprint.project.business_management_system.requestDto.PaymentRequestDto;
 import com.sprint.project.business_management_system.responseDto.PaymentResponseDto;
+import com.sprint.project.business_management_system.service.PaymentService;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {

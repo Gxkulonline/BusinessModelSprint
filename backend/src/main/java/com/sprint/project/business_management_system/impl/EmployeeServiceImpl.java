@@ -1,4 +1,4 @@
-package com.sprint.project.business_management_system.service;
+package com.sprint.project.business_management_system.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +12,7 @@ import com.sprint.project.business_management_system.repository.EmployeeReposito
 import com.sprint.project.business_management_system.repository.OfficeRepository;
 import com.sprint.project.business_management_system.requestDto.EmployeeRequestDto;
 import com.sprint.project.business_management_system.responseDto.EmployeeResponseDto;
+import com.sprint.project.business_management_system.service.EmployeeService;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
