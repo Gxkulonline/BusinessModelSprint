@@ -1,0 +1,184 @@
+<div class="min-h-screen bg-[#0d1117] p-12 font-sans text-[#e2e8f0]">
+  <header class="mb-6 max-w-7xl mx-auto">
+    <h1 class="text-4xl font-extrabold text-white tracking-tight">Employee & Office Endpoints</h1>
+    <p class="text-base text-[#64748b] mt-2">Manage personnel records and office locations — Gokul</p>
+  </header>
+
+  <div class="h-px bg-gradient-to-r from-[#1e293b] to-transparent my-10 max-w-7xl mx-auto"></div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start max-w-7xl mx-auto">
+
+    <div class="bg-[#111827] border border-[#1e293b] rounded-[20px] p-8 shadow-2xl">
+      <h2 class="text-2xl font-bold text-[#60a5fa] mb-8">Employee Directory</h2>
+
+      <div (click)="openModal('EMPLOYEE', 'GET_ALL', 'All Employees')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET ALL EMPLOYEES</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">Retrieve a list of all staff members.</div>
+      </div>
+
+      <div (click)="openModal('EMPLOYEE', 'GET_ID', 'Find Employee by ID')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET EMPLOYEE BY ID</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">Fetch detailed info for a specific employee.</div>
+      </div>
+
+      <div (click)="openModal('EMPLOYEE', 'POST', 'Add New Employee')" class="bg-[#0f2d1f] border border-[#1a4230] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#34d399] tracking-widest mb-2 uppercase">POST NEW EMPLOYEE</div>
+        <div class="text-[15px] text-[#3a7a5a] font-medium">Register a new staff member in the system.</div>
+      </div>
+    </div>
+
+    <div class="bg-[#111827] border border-[#1e293b] rounded-[20px] p-8 shadow-2xl">
+      <h2 class="text-2xl font-bold text-[#a78bfa] mb-8">Office Locations</h2>
+
+      <div (click)="openModal('OFFICE', 'GET_ALL', 'All Offices')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET ALL OFFICES</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">Retrieve the full list of global offices.</div>
+      </div>
+
+      <div (click)="openModal('OFFICE', 'POST', 'Add New Office')" class="bg-[#0f2d1f] border border-[#1a4230] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#34d399] tracking-widest mb-2 uppercase">POST NEW OFFICE</div>
+        <div class="text-[15px] text-[#3a7a5a] font-medium">Establish a new office branch record.</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-6">
+    <div class="bg-[#111827] border border-[#1e293b] rounded-3xl w-full max-w-[650px] shadow-2xl animate-in zoom-in duration-200 flex flex-col max-h-[90vh]">
+      
+      <div class="p-8 border-b border-[#1e293b] flex justify-between items-start">
+        <div class="flex flex-col gap-2">
+          <span class="text-[13px] font-black tracking-[0.2em] uppercase"
+                [ngClass]="{'text-[#60a5fa]': currentModalType?.startsWith('GET'), 'text-[#34d399]': currentModalType==='POST'}">
+            {{ currentModalType }}
+          </span>
+          <h3 class="text-3xl font-bold text-[#f1f5f9]">{{ currentModalTitle }}</h3>
+        </div>
+        <button (click)="closeModal()" class="w-12 h-12 bg-[#1e293b] text-[#64748b] rounded-xl flex items-center justify-center hover:bg-red-600 hover:text-white transition text-xl">✕</button>
+      </div>
+
+      <div class="p-8 overflow-y-auto">
+        
+        <div *ngIf="currentModalType === 'GET_ID'">
+          <label class="block text-[13px] font-bold tracking-widest text-[#475569] uppercase mb-3">Employee ID</label>
+          <div class="flex gap-4 mb-6">
+            <input [(ngModel)]="searchId" type="text" placeholder="e.g., 1002" class="flex-1 bg-[#0d1117] border border-[#1e293b] rounded-xl px-5 py-4 text-lg text-[#e2e8f0] outline-none focus:border-[#3b82f6] transition-all">
+            <button (click)="executeAction()" class="bg-[#1d4ed8] text-white px-10 py-3 rounded-xl font-bold text-lg hover:bg-blue-600 transition">Fetch</button>
+          </div>
+        </div>
+
+        <div *ngIf="currentModalType === 'POST'" class="space-y-5">
+          
+          <ng-container *ngIf="currentEntity === 'EMPLOYEE'">
+            <div class="flex gap-4">
+              <div class="w-1/3">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Emp #</label>
+                <input [(ngModel)]="newEmployee.employee_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="w-2/3">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Email</label>
+                <input [(ngModel)]="newEmployee.email" type="email" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">First Name</label>
+                <input [(ngModel)]="newEmployee.first_name" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Last Name</label>
+                <input [(ngModel)]="newEmployee.last_name" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+            <div>
+              <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Job Title</label>
+              <input [(ngModel)]="newEmployee.job_title" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Office Code</label>
+                <input [(ngModel)]="newEmployee.office_code" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Extension</label>
+                <input [(ngModel)]="newEmployee.extension" placeholder="x123" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+            <div>
+              <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Reports To (ID)</label>
+              <input [(ngModel)]="newEmployee.reports_to" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="currentEntity === 'OFFICE'">
+            <div class="flex gap-4">
+              <div class="w-1/3">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Office Code</label>
+                <input [(ngModel)]="newOffice.office_code" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="w-2/3">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Phone</label>
+                <input [(ngModel)]="newOffice.phone" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none focus:border-[#34d399]">
+              </div>
+            </div>
+            <div>
+              <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Address Line 1</label>
+              <input [(ngModel)]="newOffice.address_line1" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+            </div>
+            <div>
+              <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Address Line 2</label>
+              <input [(ngModel)]="newOffice.address_line2" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">City</label>
+                <input [(ngModel)]="newOffice.city" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">State</label>
+                <input [(ngModel)]="newOffice.state" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Country</label>
+                <input [(ngModel)]="newOffice.country" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Postal Code</label>
+                <input [(ngModel)]="newOffice.postal_code" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Territory</label>
+                <input [(ngModel)]="newOffice.territory" placeholder="e.g. NA" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+        <div *ngIf="apiResult && (currentModalType === 'GET_ALL' || currentModalType === 'GET_ID')" class="mt-8 border border-[#1e293b] rounded-2xl overflow-hidden overflow-x-auto shadow-inner">
+          <table class="w-full text-[15px] text-left">
+            <thead class="bg-[#0d1117] text-[#475569] uppercase font-bold text-[12px] tracking-widest">
+              <tr>
+                <th class="p-5">ID/Code</th>
+                <th class="p-5">Name/City</th>
+                <th class="p-5">Job/Country</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#1e293b]">
+              <tr *ngFor="let item of apiResult" class="bg-[#111827] hover:bg-white/5 transition-colors">
+                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.employee_number || item.office_code }}</td>
+                <td class="p-5 text-base">{{ item.first_name ? item.first_name + ' ' + item.last_name : item.city }}</td>
+                <td class="p-5 text-[#94a3b8] text-base">{{ item.job_title || item.country }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="p-8 pt-0 flex gap-4">
+        <button (click)="closeModal()" class="flex-1 bg-[#1e293b] text-[#64748b] py-4 rounded-xl font-bold text-lg hover:text-[#e2e8f0] transition">Cancel</button>
+        <button *ngIf="currentModalType === 'POST'" (click)="executeAction()" class="flex-[2] bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-green-900/20">Create Record</button>
+      </div>
+    </div>
+  </div>
+</div>

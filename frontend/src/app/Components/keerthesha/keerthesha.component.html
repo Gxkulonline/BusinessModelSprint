@@ -1,0 +1,155 @@
+<div class="min-h-screen bg-[#0d1117] p-12 font-sans text-[#e2e8f0]">
+  <header class="mb-6 max-w-7xl mx-auto">
+    <h1 class="text-4xl font-extrabold text-white tracking-tight">Product Lines & Payment Endpoints</h1>
+    <p class="text-base text-[#64748b] mt-2">Manage product categories and financial transactions — Keerthesha</p>
+  </header>
+
+  <div class="h-px bg-gradient-to-r from-[#1e293b] to-transparent my-10 max-w-7xl mx-auto"></div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start max-w-7xl mx-auto">
+
+    <div class="bg-[#111827] border border-[#1e293b] rounded-[20px] p-8 shadow-2xl">
+      <h2 class="text-2xl font-bold text-[#60a5fa] mb-8">Product Lines</h2>
+
+      <div (click)="openModal('PRODUCTLINE', 'GET_ALL', 'All Product Lines')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET ALL PRODUCT LINES</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">Retrieve all product category descriptions.</div>
+      </div>
+
+      <div (click)="openModal('PRODUCTLINE', 'POST', 'Add New Product Line')" class="bg-[#0f2d1f] border border-[#1a4230] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#34d399] tracking-widest mb-2 uppercase">POST NEW PRODUCT LINE</div>
+        <div class="text-[15px] text-[#3a7a5a] font-medium">Define a new product category line.</div>
+      </div>
+    </div>
+
+    <div class="bg-[#111827] border border-[#1e293b] rounded-[20px] p-8 shadow-2xl">
+      <h2 class="text-2xl font-bold text-[#a78bfa] mb-8">Payments</h2>
+
+      <div (click)="openModal('PAYMENT', 'GET_ALL', 'All Payments')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET ALL PAYMENTS</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">View history of all financial transactions.</div>
+      </div>
+
+      <div (click)="openModal('PAYMENT', 'GET_ID', 'Find Payments by Customer ID')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET BY CUSTOMER ID</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">Fetch all payment records for a customer.</div>
+      </div>
+
+      <div (click)="openModal('PAYMENT', 'GET_TOTAL', 'Get Customer Total Payment')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET TOTAL BY ID</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">Calculate total sum paid by a customer.</div>
+      </div>
+
+      <div (click)="openModal('PAYMENT', 'POST', 'Add New Payment')" class="bg-[#0f2d1f] border border-[#1a4230] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#34d399] tracking-widest mb-2 uppercase">POST NEW PAYMENT</div>
+        <div class="text-[15px] text-[#3a7a5a] font-medium">Register a new payment transaction.</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-6">
+    <div class="bg-[#111827] border border-[#1e293b] rounded-3xl w-full max-w-[650px] shadow-2xl animate-in zoom-in duration-200 flex flex-col max-h-[90vh]">
+      
+      <div class="p-8 border-b border-[#1e293b] flex justify-between items-start">
+        <div class="flex flex-col gap-2">
+          <span class="text-[13px] font-black tracking-[0.2em] uppercase"
+                [ngClass]="{'text-[#60a5fa]': currentModalType?.startsWith('GET'), 'text-[#34d399]': currentModalType==='POST'}">
+            {{ currentModalType }}
+          </span>
+          <h3 class="text-3xl font-bold text-[#f1f5f9]">{{ currentModalTitle }}</h3>
+        </div>
+        <button (click)="closeModal()" class="w-12 h-12 bg-[#1e293b] text-[#64748b] rounded-xl flex items-center justify-center hover:bg-red-600 hover:text-white transition text-xl">✕</button>
+      </div>
+
+      <div class="p-8 overflow-y-auto">
+        
+        <div *ngIf="currentModalType === 'GET_ID' || currentModalType === 'GET_TOTAL'">
+          <label class="block text-[13px] font-bold tracking-widest text-[#475569] uppercase mb-3">Customer ID</label>
+          <div class="flex gap-4 mb-6">
+            <input [(ngModel)]="searchId" type="text" placeholder="e.g., 103" class="flex-1 bg-[#0d1117] border border-[#1e293b] rounded-xl px-5 py-4 text-lg text-[#e2e8f0] outline-none focus:border-[#3b82f6] transition-all">
+            <button (click)="executeAction()" class="bg-[#1d4ed8] text-white px-10 py-3 rounded-xl font-bold text-lg hover:bg-blue-600 transition">Fetch</button>
+          </div>
+        </div>
+
+        <div *ngIf="currentModalType === 'POST'" class="space-y-5">
+          
+          <ng-container *ngIf="currentEntity === 'PRODUCTLINE'">
+            <div>
+              <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Product Line Name</label>
+              <input [(ngModel)]="newProductLine.product_line" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+            </div>
+            <div>
+              <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Description</label>
+              <textarea [(ngModel)]="newProductLine.text_description" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none min-h-[120px]"></textarea>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">HTML OID</label>
+                <input [(ngModel)]="newProductLine.html_description" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Image OID</label>
+                <input [(ngModel)]="newProductLine.image" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="currentEntity === 'PAYMENT'">
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Customer #</label>
+                <input [(ngModel)]="newPayment.customer_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Check Number</label>
+                <input [(ngModel)]="newPayment.check_number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Amount</label>
+                <input [(ngModel)]="newPayment.amount" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Payment Date</label>
+                <input [(ngModel)]="newPayment.payment_date" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+        <div *ngIf="isLoading" class="text-center py-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div></div>
+        <div *ngIf="errorMessage" class="bg-[#1a0a0a] border border-[#3d1818] p-4 rounded-xl text-[#f87171] text-sm mt-4">⚠️ {{ errorMessage }}</div>
+
+        <div *ngIf="apiResult && currentModalType !== 'GET_TOTAL'" class="mt-8 border border-[#1e293b] rounded-2xl overflow-hidden shadow-inner">
+          <table class="w-full text-[15px] text-left">
+            <thead class="bg-[#0d1117] text-[#475569] uppercase font-bold text-[12px] tracking-widest">
+              <tr>
+                <th class="p-5">Primary Identifier</th>
+                <th class="p-5">Association</th>
+                <th class="p-5">Value/Reference</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#1e293b]">
+              <tr *ngFor="let item of apiResult" class="bg-[#111827] hover:bg-white/5 transition-colors">
+                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.product_line || item.check_number }}</td>
+                <td class="p-5 text-base">{{ item.text_description ? (item.text_description | slice:0:50) + '...' : ('Customer: ' + item.customer_number) }}</td>
+                <td class="p-5 text-[#94a3b8] text-base">{{ item.image || ('$' + item.amount) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="apiResult && currentModalType === 'GET_TOTAL'" class="mt-8 bg-[#0f2744] border border-[#1e3a5f] rounded-2xl p-10 text-center shadow-lg">
+            <div class="text-[13px] font-black text-[#60a5fa] tracking-[0.2em] mb-3 uppercase">TOTAL AGGREGATE PAYMENT</div>
+            <div class="text-5xl font-bold text-white tracking-tight">${{ apiResult | number:'1.2-2' }}</div>
+        </div>
+      </div>
+
+      <div class="p-8 pt-0 flex gap-4">
+        <button (click)="closeModal()" class="flex-1 bg-[#1e293b] text-[#64748b] py-4 rounded-xl font-bold text-lg hover:text-[#e2e8f0] transition">Cancel</button>
+        <button *ngIf="currentModalType === 'POST'" (click)="executeAction()" class="flex-[2] bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-green-900/20">Create Record</button>
+      </div>
+    </div>
+  </div>
+</div>

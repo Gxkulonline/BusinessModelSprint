@@ -1,0 +1,165 @@
+<div class="min-h-screen bg-[#0d1117] p-12 font-sans text-[#e2e8f0]">
+  <header class="mb-6 max-w-7xl mx-auto">
+    <h1 class="text-4xl font-extrabold text-white tracking-tight">Order & OrderDetail Endpoints</h1>
+    <p class="text-base text-[#64748b] mt-2">Manage all operations related to Orders and Line Items — Darshini</p>
+  </header>
+
+  <div class="h-px bg-gradient-to-r from-[#1e293b] to-transparent my-10 max-w-7xl mx-auto"></div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start max-w-7xl mx-auto">
+
+    <div class="bg-[#111827] border border-[#1e293b] rounded-[20px] p-8 shadow-2xl">
+      <h2 class="text-2xl font-bold text-[#60a5fa] mb-8">Orders Manager</h2>
+
+      <div (click)="openModal('ORDER', 'GET_ALL', 'All Orders')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET ALL ORDERS</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">Retrieve a list of all order records.</div>
+      </div>
+
+      <div (click)="openModal('ORDER', 'GET_ID', 'Find Order by Number')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET ORDER BY ID</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">Fetch detailed info for a specific order.</div>
+      </div>
+
+      <div (click)="openModal('ORDER', 'POST', 'Create New Order')" class="bg-[#0f2d1f] border border-[#1a4230] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#34d399] tracking-widest mb-2 uppercase">POST NEW ORDER</div>
+        <div class="text-[15px] text-[#3a7a5a] font-medium">Add a new order record to the database.</div>
+      </div>
+    </div>
+
+    <div class="bg-[#111827] border border-[#1e293b] rounded-[20px] p-8 shadow-2xl">
+      <h2 class="text-2xl font-bold text-[#a78bfa] mb-8">Order Line Items</h2>
+
+      <div (click)="openModal('ORDER_DETAIL', 'GET_ALL', 'All Order Details')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET ALL DETAILS</div>
+        <div class="text-[15px] text-[#4a7fa8] font-medium">Retrieve all line items across orders.</div>
+      </div>
+
+      <div (click)="openModal('ORDER_DETAIL', 'POST', 'Add Line Item')" class="bg-[#0f2d1f] border border-[#1a4230] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#34d399] tracking-widest mb-2 uppercase">POST NEW DETAIL</div>
+        <div class="text-[15px] text-[#3a7a5a] font-medium">Add a product line to an existing order.</div>
+      </div>
+
+      <div class="h-px bg-[#1e293b] my-8"></div>
+
+      <div (click)="openModal('ORDER_DETAIL', 'DELETE', 'Delete Line Item')" class="bg-[#2a0f0f] border border-[#3d1818] rounded-xl p-6 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#f87171] tracking-widest mb-2 uppercase">DELETE DETAIL</div>
+        <div class="text-[15px] text-[#7a3535] font-medium">Remove a specific detail entry by ID.</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-6">
+    <div class="bg-[#111827] border border-[#1e293b] rounded-3xl w-full max-w-[650px] shadow-2xl animate-in zoom-in duration-200 flex flex-col max-h-[90vh]">
+      
+      <div class="p-8 border-b border-[#1e293b] flex justify-between items-start">
+        <div class="flex flex-col gap-2">
+          <span class="text-[13px] font-black tracking-[0.2em] uppercase"
+                [ngClass]="{'text-[#60a5fa]': currentModalType?.startsWith('GET'), 'text-[#34d399]': currentModalType==='POST', 'text-[#f87171]': currentModalType==='DELETE'}">
+            {{ currentModalType }}
+          </span>
+          <h3 class="text-3xl font-bold text-[#f1f5f9]">{{ currentModalTitle }}</h3>
+        </div>
+        <button (click)="closeModal()" class="w-12 h-12 bg-[#1e293b] text-[#64748b] rounded-xl flex items-center justify-center hover:bg-red-600 hover:text-white transition text-xl">✕</button>
+      </div>
+
+      <div class="p-8 overflow-y-auto">
+        
+        <div *ngIf="currentModalType === 'GET_ID' || currentModalType === 'DELETE'">
+          <label class="block text-[13px] font-bold tracking-widest text-[#475569] uppercase mb-3">Order Number / ID</label>
+          <div class="flex gap-4 mb-6">
+            <input [(ngModel)]="searchId" type="text" placeholder="Enter order_number..." class="flex-1 bg-[#0d1117] border border-[#1e293b] rounded-xl px-5 py-4 text-lg text-[#e2e8f0] outline-none focus:border-[#3b82f6] transition-all">
+            <button (click)="executeAction()" *ngIf="currentModalType === 'GET_ID'" class="bg-[#1d4ed8] text-white px-10 py-3 rounded-xl font-bold text-lg hover:bg-blue-600 transition">Fetch</button>
+          </div>
+        </div>
+
+        <div *ngIf="currentModalType === 'POST'" class="space-y-5">
+          
+          <ng-container *ngIf="currentEntity === 'ORDER'">
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block">ORDER NUMBER</label>
+                <input [(ngModel)]="newOrder.order_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none focus:border-[#34d399]">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block">CUSTOMER NUMBER</label>
+                <input [(ngModel)]="newOrder.customer_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none focus:border-[#34d399]">
+              </div>
+            </div>
+            <div>
+              <label class="text-[12px] font-bold text-[#64748b] mb-2 block">STATUS</label>
+              <input [(ngModel)]="newOrder.status" placeholder="e.g., Shipped" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none focus:border-[#34d399]">
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block">ORDER DATE</label>
+                <input [(ngModel)]="newOrder.order_date" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block">REQUIRED DATE</label>
+                <input [(ngModel)]="newOrder.required_date" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+            <div>
+              <label class="text-[12px] font-bold text-[#64748b] mb-2 block">SHIPPED DATE</label>
+              <input [(ngModel)]="newOrder.shipped_date" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+            </div>
+            <textarea [(ngModel)]="newOrder.comments" placeholder="Add comments here..." class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none min-h-[100px] focus:border-[#34d399]"></textarea>
+          </ng-container>
+
+          <ng-container *ngIf="currentEntity === 'ORDER_DETAIL'">
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block">ORDER NUMBER</label>
+                <input [(ngModel)]="newOrderDetail.order_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block">PRODUCT CODE</label>
+                <input [(ngModel)]="newOrderDetail.product_code" type="text" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block">PRICE EACH</label>
+                <input [(ngModel)]="newOrderDetail.price_each" type="number" step="0.01" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+              <div class="flex-1">
+                <label class="text-[12px] font-bold text-[#64748b] mb-2 block">QUANTITY ORDERED</label>
+                <input [(ngModel)]="newOrderDetail.quantity_ordered" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              </div>
+            </div>
+            <div>
+              <label class="text-[12px] font-bold text-[#64748b] mb-2 block">ORDER LINE NUMBER</label>
+              <input [(ngModel)]="newOrderDetail.order_line_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+            </div>
+          </ng-container>
+        </div>
+
+        <div *ngIf="apiResult && (currentModalType === 'GET_ALL' || currentModalType === 'GET_ID')" class="mt-8 border border-[#1e293b] rounded-2xl overflow-hidden overflow-x-auto shadow-inner">
+          <table class="w-full text-[15px] text-left">
+            <thead class="bg-[#0d1117] text-[#475569] uppercase font-bold text-[12px] tracking-widest">
+              <tr>
+                <th class="p-5">Order #</th>
+                <th class="p-5">Details / Product</th>
+                <th class="p-5">Summary</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#1e293b]">
+              <tr *ngFor="let item of apiResult" class="bg-[#111827] hover:bg-white/5 transition-colors">
+                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.order_number || item.orderNumber }}</td>
+                <td class="p-5 text-base">{{ item.status || item.product_code || 'N/A' }}</td>
+                <td class="p-5 text-[#94a3b8] text-base">{{ item.order_date || ('Qty: ' + item.quantity_ordered) || 'N/A' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="p-8 pt-0 flex gap-4">
+        <button (click)="closeModal()" class="flex-1 bg-[#1e293b] text-[#64748b] py-4 rounded-xl font-bold text-lg hover:text-[#e2e8f0] transition">Cancel</button>
+        <button *ngIf="currentModalType === 'POST'" (click)="executeAction()" class="flex-[2] bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-green-900/20">Create Entry</button>
+        <button *ngIf="currentModalType === 'DELETE'" (click)="executeAction()" class="flex-[2] bg-[#b91c1c] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-red-900/20">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
