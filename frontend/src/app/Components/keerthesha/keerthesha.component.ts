@@ -20,20 +20,27 @@ export class KeertheshaComponent {
   apiResult: any = null;
   isLoading: boolean = false;
   errorMessage: string = '';
+  successMessage: string = '';
   searchId: string = '';
 
+  // ... rest of data structures ...
   newProductLine: any = {
-    product_line: '',
-    html_description: null,
-    image: null,
-    text_description: ''
+    productLine: '',
+    textDescription: '',
+    htmlDescription: null,
+    image: null
   };
 
   newPayment: any = {
-    check_number: '',
-    customer_number: null,
+    paymentId: {
+      customerNumber: null,
+      checkNumber: ''
+    },
+    paymentDate: '',
     amount: 0,
-    payment_date: ''
+    customer: {
+      customerNumber: null
+    }
   };
 
   constructor(
@@ -49,23 +56,38 @@ export class KeertheshaComponent {
     this.isModalOpen = true;
     this.apiResult = null;
     this.errorMessage = '';
+    this.successMessage = '';
     this.searchId = '';
     if (type === 'POST') this.resetForms();
+
+    // Auto-fetch if it's a GET_ALL request
+    if (type === 'GET_ALL') {
+      this.executeAction();
+    }
   }
 
   resetForms() {
-    this.newProductLine = { product_line: '', html_description: null, image: null, text_description: '' };
-    this.newPayment = { check_number: '', customer_number: null, amount: 0, payment_date: '' };
+    this.newProductLine = { productLine: '', textDescription: '', htmlDescription: null, image: null };
+    this.newPayment = { 
+      paymentId: { customerNumber: null, checkNumber: '' }, 
+      paymentDate: '', amount: 0, 
+      customer: { customerNumber: null } 
+    };
   }
 
   closeModal() {
     this.isModalOpen = false;
+    this.apiResult = null;
+    this.searchId = '';
+    this.errorMessage = '';
+    this.successMessage = '';
     this.cdr.detectChanges();
   }
 
   executeAction() {
     this.isLoading = true;
     this.errorMessage = '';
+    this.successMessage = '';
     this.apiResult = null;
 
     if (this.currentEntity === 'PRODUCTLINE') {
@@ -85,8 +107,18 @@ export class KeertheshaComponent {
         break;
       case 'POST':
         this.productLineService.create(this.newProductLine).subscribe({
-          next: (res) => { this.apiResult = [res]; this.isLoading = false; this.cdr.detectChanges(); },
-          error: () => { this.errorMessage = 'Error saving product line'; this.isLoading = false; this.cdr.detectChanges(); }
+          next: (res) => { 
+            this.apiResult = [res]; 
+            this.successMessage = 'New product line category added successfully!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: (err) => { 
+            this.errorMessage = 'Error saving product line: ' + (err.error?.message || 'Check required fields'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
         });
         break;
     }
@@ -113,9 +145,22 @@ export class KeertheshaComponent {
         });
         break;
       case 'POST':
+        // Sync ID field for entity mapping
+        this.newPayment.customer.customerNumber = this.newPayment.paymentId.customerNumber;
+
         this.paymentService.create(this.newPayment).subscribe({
-          next: (res) => { this.apiResult = [res]; this.isLoading = false; this.cdr.detectChanges(); },
-          error: () => { this.errorMessage = 'Error saving payment'; this.isLoading = false; this.cdr.detectChanges(); }
+          next: (res) => { 
+            this.apiResult = [res]; 
+            this.successMessage = 'Payment record successfully processed and saved!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: (err) => { 
+            this.errorMessage = 'Error saving payment: ' + (err.error?.message || 'Check IDs (Date: YYYY-MM-DD)'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
         });
         break;
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
@@ -10,21 +10,27 @@ export class CustomerService {
 
   // Fetch all customers for the table view
   getAll(): Observable<any[]> { 
-    return this.http.get<any[]>(this.baseUrl); 
+    return this.http.get<any>(this.baseUrl).pipe(
+      map(response => response.data)
+    ); 
   }
 
   // Fetch single customer by ID
   getById(id: string): Observable<any> { 
-    return this.http.get<any>(`${this.baseUrl}/${id}`); 
+    return this.http.get<any>(`${this.baseUrl}/${id}`).pipe(
+      map(response => response.data)
+    ); 
   }
 
-  // POST: Create a new customer (Swagger/DB Integration)
+  // POST: Create a new customer
   create(customerData: any): Observable<any> {
-    return this.http.post<any>(this.baseUrl, customerData);
+    return this.http.post<any>(this.baseUrl, customerData).pipe(
+      map(response => response.data)
+    );
   }
 
   // DELETE: Remove customer by ID
   delete(id: string): Observable<any> { 
-    return this.http.delete(`${this.baseUrl}/${id}`); 
+    return this.http.delete<any>(`${this.baseUrl}/${id}`); 
   }
 }

@@ -25,51 +25,64 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-        .cors(cors -> {})
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/productlines/**", "/products/**")
-                    .hasAnyRole("GOKUL", "ADMIN")
-                .requestMatchers("/payments/**")
-                    .hasAnyRole("YUVASRI", "ADMIN")
-                .requestMatchers("/orders/**", "/orderdetails/**")
-                    .hasAnyRole("DHARSHINI", "ADMIN")
-                .requestMatchers("/employees/**", "/offices/**", "/customers/**")
-                    .hasAnyRole("KEERTHISHA", "ADMIN")
-                .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html"
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
-            .httpBasic();
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/me").authenticated()
+                        .requestMatchers("/productlines/**", "/payments/**")
+                        .hasAnyRole("KEERTHISHA", "ADMIN")
+                        .requestMatchers("/products/**", "/customers/**")
+                        .hasAnyRole("YUVASRI", "ADMIN")
+                        .requestMatchers("/orders/**", "/orderdetails/**")
+                        .hasAnyRole("DHARSHINI", "ADMIN")
+                        .requestMatchers("/employees/**", "/offices/**")
+                        .hasAnyRole("GOKUL", "ADMIN")
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic();
         return http.build();
     }
+
+    @Bean
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+        org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
+        configuration.setAllowedOrigins(java.util.List.of("http://localhost:4200"));
+        configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder encoder) {
 
         UserDetails gokul = User
                 .withUsername("gokul")
-                .password(encoder.encode("gokul123"))
+                .password(encoder.encode("1234"))
                 .roles("GOKUL")
                 .build();
 
         UserDetails yuvasri = User
                 .withUsername("yuvasri")
-                .password(encoder.encode("yuvasri123"))
+                .password(encoder.encode("1234"))
                 .roles("YUVASRI")
                 .build();
 
         UserDetails dharshini = User
                 .withUsername("dharshini")
-                .password(encoder.encode("dharshini123"))
+                .password(encoder.encode("1234"))
                 .roles("DHARSHINI")
                 .build();
 
         UserDetails keerthisha = User
                 .withUsername("keerthisha")
-                .password(encoder.encode("keerthisha123"))
+                .password(encoder.encode("1234"))
                 .roles("KEERTHISHA")
                 .build();
 
@@ -84,7 +97,6 @@ public class SecurityConfig {
                 yuvasri,
                 dharshini,
                 keerthisha,
-                admin
-        );
+                admin);
     }
 }

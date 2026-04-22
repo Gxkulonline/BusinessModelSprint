@@ -70,6 +70,20 @@
 
       <div class="p-8 overflow-y-auto">
         
+        <div *ngIf="successMessage" class="bg-[#064e3b] border border-[#059669] p-4 rounded-xl text-[#34d399] text-sm mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <span class="text-xl">✅</span>
+          <span class="font-medium">{{ successMessage }}</span>
+        </div>
+
+        <div *ngIf="errorMessage" class="bg-[#450a0a] border border-[#b91c1c] p-4 rounded-xl text-[#f87171] text-sm mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <span>⚠️</span>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div *ngIf="isLoading" class="flex justify-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#60a5fa]"></div>
+        </div>
+
         <div *ngIf="currentModalType === 'GET_ID' || currentModalType === 'DELETE'">
           <label class="block text-[13px] font-bold tracking-widest text-[#475569] uppercase mb-3">Identifier (ID/Code)</label>
           <div class="flex gap-4 mb-6">
@@ -84,22 +98,22 @@
             <div class="flex gap-4">
               <div class="w-1/3">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Cust #</label>
-                <input [(ngModel)]="newCustomer.customer_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newCustomer.customerNumber" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
               <div class="w-2/3">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Customer Name</label>
-                <input [(ngModel)]="newCustomer.customer_name" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newCustomer.customerName" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
             </div>
 
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">First Name</label>
-                <input [(ngModel)]="newCustomer.contact_first_name" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newCustomer.contactFirstName" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Last Name</label>
-                <input [(ngModel)]="newCustomer.contact_last_name" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newCustomer.contactLastName" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
             </div>
 
@@ -110,13 +124,13 @@
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Sales Rep ID</label>
-                <input [(ngModel)]="newCustomer.sales_rep_employee_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newCustomer.salesRepEmployee.employeeNumber" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
             </div>
 
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Address Line 1</label>
-              <input [(ngModel)]="newCustomer.address_line1" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+              <input [(ngModel)]="newCustomer.addressLine1" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
             </div>
 
             <div class="flex gap-4">
@@ -133,7 +147,7 @@
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Postal Code</label>
-                <input [(ngModel)]="newCustomer.postal_code" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newCustomer.postalCode" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Country</label>
@@ -141,7 +155,7 @@
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Credit Limit</label>
-                <input [(ngModel)]="newCustomer.credit_limit" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newCustomer.creditLimit" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
             </div>
           </ng-container>
@@ -150,39 +164,39 @@
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Product Code</label>
-                <input [(ngModel)]="newProduct.product_code" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newProduct.productCode" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Product Name</label>
-                <input [(ngModel)]="newProduct.product_name" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newProduct.productName" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
             </div>
 
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Product Line</label>
-                <input [(ngModel)]="newProduct.product_line" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newProduct.productLine.productLine" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Scale</label>
-                <input [(ngModel)]="newProduct.product_scale" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newProduct.productScale" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
             </div>
 
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Vendor</label>
-              <input [(ngModel)]="newProduct.product_vendor" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+              <input [(ngModel)]="newProduct.productVendor" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
             </div>
 
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Description</label>
-              <textarea [(ngModel)]="newProduct.product_description" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0] min-h-[80px]"></textarea>
+              <textarea [(ngModel)]="newProduct.productDesc" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0] min-h-[80px]"></textarea>
             </div>
 
             <div class="grid grid-cols-3 gap-4">
               <div>
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Buy Price</label>
-                <input [(ngModel)]="newProduct.buy_price" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newProduct.buyPrice" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
               <div>
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">MSRP</label>
@@ -190,7 +204,7 @@
               </div>
               <div>
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Stock Qty</label>
-                <input [(ngModel)]="newProduct.quantity_in_stock" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
+                <input [(ngModel)]="newProduct.quantityInStock" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3 text-base text-[#e2e8f0]">
               </div>
             </div>
           </ng-container>
@@ -207,9 +221,9 @@
             </thead>
             <tbody class="divide-y divide-[#1e293b]">
               <tr *ngFor="let item of apiResult" class="bg-[#111827] hover:bg-white/5 transition-colors">
-                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.customer_number || item.product_code || item.customerNumber || item.productCode }}</td>
-                <td class="p-5 text-base">{{ item.customer_name || item.product_name || item.customerName || item.productName }}</td>
-                <td class="p-5 text-[#94a3b8] text-base">{{ item.phone || item.product_vendor || ('$' + item.buy_price) }}</td>
+                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.customerNumber || item.productCode || item.customer_number || item.product_code }}</td>
+                <td class="p-5 text-base">{{ item.customerName || item.productName || item.customer_name || item.product_name }}</td>
+                <td class="p-5 text-[#94a3b8] text-base">{{ item.phone || item.productVendor || item.product_vendor || ('$' + item.buyPrice) }}</td>
               </tr>
             </tbody>
           </table>
@@ -218,6 +232,7 @@
 
       <div class="p-8 pt-0 flex gap-4">
         <button (click)="closeModal()" class="flex-1 bg-[#1e293b] text-[#64748b] py-4 rounded-xl font-bold text-lg hover:text-[#e2e8f0] transition">Cancel</button>
+        <button *ngIf="currentModalType === 'GET_ALL'" (click)="executeAction()" class="flex-[2] bg-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-600 transition shadow-lg shadow-blue-900/20">Fetch Data</button>
         <button *ngIf="currentModalType === 'POST'" (click)="executeAction()" class="flex-[2] bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-green-900/20">Create Record</button>
         <button *ngIf="currentModalType === 'DELETE'" (click)="executeAction()" class="flex-[2] bg-[#b91c1c] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-red-900/20">Confirm Delete</button>
       </div>

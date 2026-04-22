@@ -20,28 +20,32 @@ export class GokulComponent {
   apiResult: any = null;
   isLoading: boolean = false;
   errorMessage: string = '';
+  successMessage: string = '';
   searchId: string = '';
 
+  // Matching backend camelCase and structure
   newEmployee: any = {
-    employee_number: null,
-    email: '',
-    first_name: '',
-    job_title: '',
-    last_name: '',
-    office_code: '',
+    employeeNumber: null,
+    firstName: '',
+    lastName: '',
     extension: '',
-    reports_to: null
+    email: '',
+    jobTitle: '',
+    office: {
+      officeCode: ''
+    },
+    reportsTo: null
   };
 
   newOffice: any = {
-    office_code: '',
+    officeCode: '',
     city: '',
-    country: '',
     phone: '',
-    address_line1: '',
-    address_line2: '',
-    postal_code: '',
+    addressLine1: '',
+    addressLine2: '',
     state: '',
+    country: '',
+    postalCode: '',
     territory: ''
   };
 
@@ -58,23 +62,34 @@ export class GokulComponent {
     this.isModalOpen = true;
     this.apiResult = null;
     this.errorMessage = '';
+    this.successMessage = '';
     this.searchId = '';
     if (type === 'POST') this.resetForms();
+    
+    // Auto-fetch if it's a GET_ALL request
+    if (type === 'GET_ALL') {
+      this.executeAction();
+    }
   }
 
   resetForms() {
-    this.newEmployee = { employee_number: null, email: '', first_name: '', job_title: '', last_name: '', office_code: '', extension: '', reports_to: null };
-    this.newOffice = { office_code: '', city: '', country: '', phone: '', address_line1: '', address_line2: '', postal_code: '', state: '', territory: '' };
+    this.newEmployee = { employeeNumber: null, firstName: '', lastName: '', extension: '', email: '', jobTitle: '', office: { officeCode: '' }, reportsTo: null };
+    this.newOffice = { officeCode: '', city: '', phone: '', addressLine1: '', addressLine2: '', state: '', country: '', postalCode: '', territory: '' };
   }
 
   closeModal() {
     this.isModalOpen = false;
+    this.apiResult = null;
+    this.searchId = '';
+    this.errorMessage = '';
+    this.successMessage = '';
     this.cdr.detectChanges();
   }
 
   executeAction() {
     this.isLoading = true;
     this.errorMessage = '';
+    this.successMessage = '';
     this.apiResult = null;
 
     if (this.currentEntity === 'EMPLOYEE') {
@@ -100,8 +115,18 @@ export class GokulComponent {
         break;
       case 'POST':
         this.employeeService.create(this.newEmployee).subscribe({
-          next: (res) => { this.apiResult = [res]; this.isLoading = false; this.cdr.detectChanges(); },
-          error: () => { this.errorMessage = 'Error saving employee'; this.isLoading = false; this.cdr.detectChanges(); }
+          next: (res) => { 
+            this.apiResult = [res]; 
+            this.successMessage = 'Employee record successfully added to database!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: (err) => { 
+            this.errorMessage = 'Error saving employee: ' + (err.error?.message || 'Check required fields'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
         });
         break;
     }
@@ -117,8 +142,18 @@ export class GokulComponent {
         break;
       case 'POST':
         this.officeService.create(this.newOffice).subscribe({
-          next: (res) => { this.apiResult = [res]; this.isLoading = false; this.cdr.detectChanges(); },
-          error: () => { this.errorMessage = 'Error saving office'; this.isLoading = false; this.cdr.detectChanges(); }
+          next: (res) => { 
+            this.apiResult = [res]; 
+            this.successMessage = 'Office location registered successfully!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: (err) => { 
+            this.errorMessage = 'Error saving office: ' + (err.error?.message || 'Check required fields'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
         });
         break;
     }

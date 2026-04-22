@@ -39,27 +39,29 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-    // 3. Normalize the name to match your AuthService keys (e.g., 'Yuvasri' -> 'yuvasri')
-    const memberKey = this.selectedMember?.name.toLowerCase();
+    this.errorMessage = '';
+    this.authService.login(this.usernameInput, this.passwordInput).subscribe(isValid => {
+      if (isValid) {
+        const user = this.authService.getUser();
+        const roles = user.roles || [];
 
-    // 4. Call the AuthService login method
-    const isValid = this.authService.login(memberKey, this.usernameInput, this.passwordInput);
-
-    if (isValid) {
-      this.errorMessage = '';
-      // Only navigate if login is true
-      if (this.selectedMember?.name === 'Yuvasri') {
-        this.router.navigate(['/yuvasri']);
-      } else if (this.selectedMember?.name === 'Gokul') {
-        this.router.navigate(['/gokul']);
-      } else if (this.selectedMember?.name === 'Darshini') {
-        this.router.navigate(['/darshini']);
-      } else if (this.selectedMember?.name === 'Keerthesha') {
-        this.router.navigate(['/keerthesha']);
+        // Navigate based on backend roles
+        if (roles.includes('ROLE_ADMIN')) {
+          this.router.navigate(['/yuvasri']); // Admins can go anywhere, default to Yuvasri
+        } else if (roles.includes('ROLE_YUVASRI')) {
+          this.router.navigate(['/yuvasri']);
+        } else if (roles.includes('ROLE_GOKUL')) {
+          this.router.navigate(['/gokul']);
+        } else if (roles.includes('ROLE_DHARSHINI')) {
+          this.router.navigate(['/darshini']);
+        } else if (roles.includes('ROLE_KEERTHISHA')) {
+          this.router.navigate(['/keerthesha']);
+        } else {
+          this.errorMessage = 'User has no assigned profile roles.';
+        }
+      } else {
+        this.errorMessage = 'Invalid username or password for ' + this.selectedMember?.name;
       }
-    } else {
-      // 5. Show error message if invalid
-      this.errorMessage = 'Invalid username or password for ' + this.selectedMember?.name;
-    }
+    });
   }
 }

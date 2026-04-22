@@ -20,24 +20,36 @@ export class DarshiniComponent {
   apiResult: any = null;
   isLoading: boolean = false;
   errorMessage: string = '';
+  successMessage: string = '';
   searchId: string = '';
 
+  // ... rest of data structures ...
   newOrder: any = {
-    order_number: null,
-    order_date: '',
-    required_date: '',
+    orderNumber: null,
+    orderDate: '',
+    requiredDate: '',
+    shippedDate: '',
     status: '',
-    customer_number: null,
     comments: '',
-    shipped_date: ''
+    customer: {
+      customerNumber: null
+    }
   };
 
   newOrderDetail: any = {
-    order_number: null,
-    product_code: '',
-    price_each: 0,
-    quantity_ordered: 0,
-    order_line_number: 0
+    id: {
+      orderNumber: null,
+      productCode: ''
+    },
+    quantityOrdered: 0,
+    priceEach: 0,
+    orderLineNumber: 0,
+    order: {
+      orderNumber: null
+    },
+    product: {
+      productCode: ''
+    }
   };
 
   constructor(
@@ -53,23 +65,42 @@ export class DarshiniComponent {
     this.isModalOpen = true;
     this.apiResult = null;
     this.errorMessage = '';
+    this.successMessage = '';
     this.searchId = '';
     if (type === 'POST') this.resetForms();
+
+    // Auto-fetch if it's a GET_ALL request
+    if (type === 'GET_ALL') {
+      this.executeAction();
+    }
   }
 
   resetForms() {
-    this.newOrder = { order_number: null, order_date: '', required_date: '', status: '', customer_number: null, comments: '', shipped_date: '' };
-    this.newOrderDetail = { order_number: null, product_code: '', price_each: 0, quantity_ordered: 0, order_line_number: 0 };
+    this.newOrder = { 
+      orderNumber: null, orderDate: '', requiredDate: '', shippedDate: '', 
+      status: '', comments: '', customer: { customerNumber: null } 
+    };
+    this.newOrderDetail = { 
+      id: { orderNumber: null, productCode: '' }, 
+      quantityOrdered: 0, priceEach: 0, orderLineNumber: 0,
+      order: { orderNumber: null }, product: { productCode: '' }
+    };
   }
 
   closeModal() {
     this.isModalOpen = false;
+    this.apiResult = null;
+    this.searchId = '';
+    this.errorMessage = '';
+    this.successMessage = '';
     this.cdr.detectChanges();
   }
 
   executeAction() {
     this.isLoading = true;
     this.errorMessage = '';
+    this.successMessage = '';
+    this.apiResult = null;
     
     if (this.currentEntity === 'ORDER') {
       this.handleOrderActions();
@@ -94,8 +125,18 @@ export class DarshiniComponent {
         break;
       case 'POST':
         this.orderService.create(this.newOrder).subscribe({
-          next: (res) => { this.apiResult = [res]; this.isLoading = false; this.cdr.detectChanges(); },
-          error: () => { this.errorMessage = 'Error saving order'; this.isLoading = false; this.cdr.detectChanges(); }
+          next: (res) => { 
+            this.apiResult = [res]; 
+            this.successMessage = 'Order created and saved in dynamic database!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: (err) => { 
+            this.errorMessage = 'Error saving order: ' + (err.error?.message || 'Check fields (Date: YYYY-MM-DD)'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
         });
         break;
     }
@@ -110,15 +151,37 @@ export class DarshiniComponent {
         });
         break;
       case 'POST':
+        // Sync relations for entity mapping
+        this.newOrderDetail.order.orderNumber = this.newOrderDetail.id.orderNumber;
+        this.newOrderDetail.product.productCode = this.newOrderDetail.id.productCode;
+
         this.detailService.create(this.newOrderDetail).subscribe({
-          next: (res) => { this.apiResult = [res]; this.isLoading = false; this.cdr.detectChanges(); },
-          error: () => { this.errorMessage = 'Error saving detail'; this.isLoading = false; this.cdr.detectChanges(); }
+          next: (res) => { 
+            this.apiResult = [res]; 
+            this.successMessage = 'Order line item successfully added!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: (err) => { 
+            this.errorMessage = 'Error saving detail: ' + (err.error?.message || 'Conflict or missing IDs'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
         });
         break;
       case 'DELETE':
-        this.detailService.delete(this.searchId).subscribe({
-          next: () => { this.apiResult = [{ order_number: this.searchId, status: 'DELETED' }]; this.isLoading = false; this.cdr.detectChanges(); },
-          error: () => { this.errorMessage = 'Delete failed'; this.isLoading = false; this.cdr.detectChanges(); }
+        const parts = this.searchId.split(',');
+        const idObj = parts.length === 2 ? { orderNumber: Number(parts[0]), productCode: parts[1] } : this.searchId;
+        this.detailService.delete(idObj).subscribe({
+          next: () => { 
+            this.apiResult = [{ id: idObj, status: 'DELETED' }]; 
+            this.successMessage = 'Record deleted successfully.';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: () => { this.errorMessage = 'Delete failed. Use format: num,code'; this.isLoading = false; this.cdr.detectChanges(); }
         });
         break;
     }

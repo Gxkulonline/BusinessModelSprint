@@ -64,6 +64,19 @@
       </div>
 
       <div class="p-8 overflow-y-auto">
+        <div *ngIf="successMessage" class="bg-[#064e3b] border border-[#059669] p-4 rounded-xl text-[#34d399] text-sm mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <span class="text-xl">✅</span>
+          <span class="font-medium">{{ successMessage }}</span>
+        </div>
+
+        <div *ngIf="errorMessage" class="bg-[#450a0a] border border-[#b91c1c] p-4 rounded-xl text-[#f87171] text-sm mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <span>⚠️</span>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div *ngIf="isLoading" class="flex justify-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#60a5fa]"></div>
+        </div>
         
         <div *ngIf="currentModalType === 'GET_ID' || currentModalType === 'DELETE'">
           <label class="block text-[13px] font-bold tracking-widest text-[#475569] uppercase mb-3">Order Number / ID</label>
@@ -79,11 +92,11 @@
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block">ORDER NUMBER</label>
-                <input [(ngModel)]="newOrder.order_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none focus:border-[#34d399]">
+                <input [(ngModel)]="newOrder.orderNumber" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none focus:border-[#34d399]">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block">CUSTOMER NUMBER</label>
-                <input [(ngModel)]="newOrder.customer_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none focus:border-[#34d399]">
+                <input [(ngModel)]="newOrder.customer.customerNumber" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none focus:border-[#34d399]">
               </div>
             </div>
             <div>
@@ -93,16 +106,16 @@
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block">ORDER DATE</label>
-                <input [(ngModel)]="newOrder.order_date" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newOrder.orderDate" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block">REQUIRED DATE</label>
-                <input [(ngModel)]="newOrder.required_date" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newOrder.requiredDate" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
             </div>
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block">SHIPPED DATE</label>
-              <input [(ngModel)]="newOrder.shipped_date" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              <input [(ngModel)]="newOrder.shippedDate" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
             </div>
             <textarea [(ngModel)]="newOrder.comments" placeholder="Add comments here..." class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none min-h-[100px] focus:border-[#34d399]"></textarea>
           </ng-container>
@@ -111,26 +124,26 @@
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block">ORDER NUMBER</label>
-                <input [(ngModel)]="newOrderDetail.order_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newOrderDetail.id.orderNumber" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block">PRODUCT CODE</label>
-                <input [(ngModel)]="newOrderDetail.product_code" type="text" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newOrderDetail.id.productCode" type="text" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
             </div>
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block">PRICE EACH</label>
-                <input [(ngModel)]="newOrderDetail.price_each" type="number" step="0.01" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newOrderDetail.priceEach" type="number" step="0.01" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block">QUANTITY ORDERED</label>
-                <input [(ngModel)]="newOrderDetail.quantity_ordered" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newOrderDetail.quantityOrdered" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
             </div>
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block">ORDER LINE NUMBER</label>
-              <input [(ngModel)]="newOrderDetail.order_line_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              <input [(ngModel)]="newOrderDetail.orderLineNumber" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
             </div>
           </ng-container>
         </div>
@@ -146,9 +159,9 @@
             </thead>
             <tbody class="divide-y divide-[#1e293b]">
               <tr *ngFor="let item of apiResult" class="bg-[#111827] hover:bg-white/5 transition-colors">
-                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.order_number || item.orderNumber }}</td>
-                <td class="p-5 text-base">{{ item.status || item.product_code || 'N/A' }}</td>
-                <td class="p-5 text-[#94a3b8] text-base">{{ item.order_date || ('Qty: ' + item.quantity_ordered) || 'N/A' }}</td>
+                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.orderNumber || (item.id ? item.id.orderNumber : '') || item.order_number }}</td>
+                <td class="p-5 text-base">{{ item.status || (item.id ? item.id.productCode : '') || item.productCode || item.product_code || 'N/A' }}</td>
+                <td class="p-5 text-[#94a3b8] text-base">{{ item.orderDate || (item.quantityOrdered ? ('Qty: ' + item.quantityOrdered) : '') || item.order_date || ('Qty: ' + item.quantity_ordered) || 'N/A' }}</td>
               </tr>
             </tbody>
           </table>
@@ -157,6 +170,7 @@
 
       <div class="p-8 pt-0 flex gap-4">
         <button (click)="closeModal()" class="flex-1 bg-[#1e293b] text-[#64748b] py-4 rounded-xl font-bold text-lg hover:text-[#e2e8f0] transition">Cancel</button>
+        <button *ngIf="currentModalType === 'GET_ALL'" (click)="executeAction()" class="flex-[2] bg-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-600 transition shadow-lg shadow-blue-900/20">Fetch Data</button>
         <button *ngIf="currentModalType === 'POST'" (click)="executeAction()" class="flex-[2] bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-green-900/20">Create Entry</button>
         <button *ngIf="currentModalType === 'DELETE'" (click)="executeAction()" class="flex-[2] bg-[#b91c1c] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-red-900/20">Confirm Delete</button>
       </div>
