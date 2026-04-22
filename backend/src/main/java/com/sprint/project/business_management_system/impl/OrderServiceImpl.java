@@ -66,4 +66,12 @@ public class OrderServiceImpl implements OrderService {
                 .map(this::mapToDto)
                 .toList();
     }
-}
+
+    @Override
+    public List<OrderResponseDto> getAllOrders() {
+        return orderRepo.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+}

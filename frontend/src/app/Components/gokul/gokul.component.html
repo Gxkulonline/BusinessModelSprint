@@ -57,6 +57,19 @@
       </div>
 
       <div class="p-8 overflow-y-auto">
+        <div *ngIf="successMessage" class="bg-[#064e3b] border border-[#059669] p-4 rounded-xl text-[#34d399] text-sm mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <span class="text-xl">✅</span>
+          <span class="font-medium">{{ successMessage }}</span>
+        </div>
+
+        <div *ngIf="errorMessage" class="bg-[#450a0a] border border-[#b91c1c] p-4 rounded-xl text-[#f87171] text-sm mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <span>⚠️</span>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div *ngIf="isLoading" class="flex justify-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#60a5fa]"></div>
+        </div>
         
         <div *ngIf="currentModalType === 'GET_ID'">
           <label class="block text-[13px] font-bold tracking-widest text-[#475569] uppercase mb-3">Employee ID</label>
@@ -72,7 +85,7 @@
             <div class="flex gap-4">
               <div class="w-1/3">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Emp #</label>
-                <input [(ngModel)]="newEmployee.employee_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newEmployee.employeeNumber" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="w-2/3">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Email</label>
@@ -82,21 +95,21 @@
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">First Name</label>
-                <input [(ngModel)]="newEmployee.first_name" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newEmployee.firstName" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Last Name</label>
-                <input [(ngModel)]="newEmployee.last_name" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newEmployee.lastName" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
             </div>
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Job Title</label>
-              <input [(ngModel)]="newEmployee.job_title" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              <input [(ngModel)]="newEmployee.jobTitle" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
             </div>
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Office Code</label>
-                <input [(ngModel)]="newEmployee.office_code" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newEmployee.office.officeCode" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Extension</label>
@@ -105,7 +118,7 @@
             </div>
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Reports To (ID)</label>
-              <input [(ngModel)]="newEmployee.reports_to" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              <input [(ngModel)]="newEmployee.reportsTo" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
             </div>
           </ng-container>
 
@@ -113,7 +126,7 @@
             <div class="flex gap-4">
               <div class="w-1/3">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Office Code</label>
-                <input [(ngModel)]="newOffice.office_code" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newOffice.officeCode" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="w-2/3">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Phone</label>
@@ -122,11 +135,11 @@
             </div>
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Address Line 1</label>
-              <input [(ngModel)]="newOffice.address_line1" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              <input [(ngModel)]="newOffice.addressLine1" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
             </div>
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Address Line 2</label>
-              <input [(ngModel)]="newOffice.address_line2" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              <input [(ngModel)]="newOffice.addressLine2" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
             </div>
             <div class="flex gap-4">
               <div class="flex-1">
@@ -145,7 +158,7 @@
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Postal Code</label>
-                <input [(ngModel)]="newOffice.postal_code" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newOffice.postalCode" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Territory</label>
@@ -166,9 +179,9 @@
             </thead>
             <tbody class="divide-y divide-[#1e293b]">
               <tr *ngFor="let item of apiResult" class="bg-[#111827] hover:bg-white/5 transition-colors">
-                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.employee_number || item.office_code }}</td>
-                <td class="p-5 text-base">{{ item.first_name ? item.first_name + ' ' + item.last_name : item.city }}</td>
-                <td class="p-5 text-[#94a3b8] text-base">{{ item.job_title || item.country }}</td>
+                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.employeeNumber || item.officeCode || item.employee_number || item.office_code }}</td>
+                <td class="p-5 text-base">{{ (item.firstName ? (item.firstName + ' ' + item.lastName) : item.city) || (item.first_name ? (item.first_name + ' ' + item.last_name) : item.city) }}</td>
+                <td class="p-5 text-[#94a3b8] text-base">{{ item.jobTitle || item.phone || item.job_title || item.country }}</td>
               </tr>
             </tbody>
           </table>
@@ -177,6 +190,7 @@
 
       <div class="p-8 pt-0 flex gap-4">
         <button (click)="closeModal()" class="flex-1 bg-[#1e293b] text-[#64748b] py-4 rounded-xl font-bold text-lg hover:text-[#e2e8f0] transition">Cancel</button>
+        <button *ngIf="currentModalType === 'GET_ALL'" (click)="executeAction()" class="flex-[2] bg-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-600 transition shadow-lg shadow-blue-900/20">Fetch Data</button>
         <button *ngIf="currentModalType === 'POST'" (click)="executeAction()" class="flex-[2] bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-green-900/20">Create Record</button>
       </div>
     </div>

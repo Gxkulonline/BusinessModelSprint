@@ -21,23 +21,40 @@ export class YuvasriComponent {
   apiResult: any = null;
   isLoading: boolean = false;
   errorMessage: string = '';
+  successMessage: string = '';
   searchId: string = '';
 
-  // Matching your backend snake_case
+  // ... rest of data structures ...
   newCustomer: any = {
-    customer_number: null,
-    customer_name: '',
+    customerNumber: null,
+    customerName: '',
+    contactFirstName: '',
+    contactLastName: '',
     phone: '',
+    addressLine1: '',
+    addressLine2: '',
     city: '',
-    credit_limit: 0
+    state: '',
+    postalCode: '',
+    country: '',
+    creditLimit: 0,
+    salesRepEmployee: {
+      employeeNumber: null
+    }
   };
 
   newProduct: any = {
-    product_code: '',
-    product_name: '',
-    buy_price: 0,
-    quantity_in_stock: 0,
-    product_vendor: ''
+    productCode: '',
+    productName: '',
+    productLine: {
+      productLine: ''
+    },
+    productScale: '',
+    productVendor: '',
+    productDesc: '',
+    quantityInStock: 0,
+    buyPrice: 0,
+    msrp: 0
   };
 
   constructor(
@@ -53,17 +70,31 @@ export class YuvasriComponent {
     this.isModalOpen = true;
     this.apiResult = null;
     this.errorMessage = '';
+    this.successMessage = '';
     this.searchId = '';
     
     // Clear forms when opening POST/PUT
     if (type === 'POST' || type === 'PUT') {
       this.resetForms();
     }
+
+    // Auto-fetch if it's a GET_ALL request
+    if (type === 'GET_ALL') {
+      this.executeAction();
+    }
   }
 
   resetForms() {
-    this.newCustomer = { customer_number: null, customer_name: '', phone: '', city: '', credit_limit: 0 };
-    this.newProduct = { product_code: '', product_name: '', buy_price: 0, quantity_in_stock: 0, product_vendor: '' };
+    this.newCustomer = { 
+      customerNumber: null, customerName: '', contactFirstName: '', contactLastName: '', 
+      phone: '', addressLine1: '', addressLine2: '', city: '', state: '', 
+      postalCode: '', country: '', creditLimit: 0, salesRepEmployee: { employeeNumber: null } 
+    };
+    this.newProduct = { 
+      productCode: '', productName: '', productLine: { productLine: '' }, 
+      productScale: '', productVendor: '', productDesc: '', 
+      quantityInStock: 0, buyPrice: 0, msrp: 0 
+    };
   }
 
   closeModal() {
@@ -71,12 +102,14 @@ export class YuvasriComponent {
     this.apiResult = null;
     this.searchId = '';
     this.errorMessage = '';
+    this.successMessage = '';
     this.cdr.detectChanges();
   }
 
   executeAction() {
     this.isLoading = true;
     this.errorMessage = '';
+    this.successMessage = '';
     this.apiResult = null;
 
     if (this.currentEntity === 'CUSTOMER') {
@@ -102,13 +135,30 @@ export class YuvasriComponent {
         break;
       case 'POST':
         this.customerService.create(this.newCustomer).subscribe({
-          next: (res) => { this.apiResult = [res]; this.isLoading = false; this.cdr.detectChanges(); },
-          error: () => { this.errorMessage = 'Error saving customer'; this.isLoading = false; this.cdr.detectChanges(); }
+          next: (res) => { 
+            this.apiResult = [res]; 
+            this.successMessage = 'Customer created successfully and added to database!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: (err) => { 
+            console.error(err);
+            this.errorMessage = 'Error saving customer: ' + (err.error?.message || 'Check required fields'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
         });
         break;
       case 'DELETE':
         this.customerService.delete(this.searchId).subscribe({
-          next: () => { this.apiResult = [{ customer_number: this.searchId, customer_name: 'DELETED SUCCESSFULLY' }]; this.isLoading = false; this.cdr.detectChanges(); },
+          next: () => { 
+            this.apiResult = [{ customerNumber: this.searchId, customerName: 'DELETED SUCCESSFULLY' }]; 
+            this.successMessage = 'Customer deleted from database.';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
           error: () => { this.errorMessage = 'Delete failed'; this.isLoading = false; this.cdr.detectChanges(); }
         });
         break;
@@ -131,8 +181,19 @@ export class YuvasriComponent {
         break;
       case 'POST':
         this.productService.create(this.newProduct).subscribe({
-          next: (res) => { this.apiResult = [res]; this.isLoading = false; this.cdr.detectChanges(); },
-          error: () => { this.errorMessage = 'Error saving product'; this.isLoading = false; this.cdr.detectChanges(); }
+          next: (res) => { 
+            this.apiResult = [res]; 
+            this.successMessage = 'Product saved successfully in catalog!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: (err) => { 
+            console.error(err);
+            this.errorMessage = 'Error saving product: ' + (err.error?.message || 'Check required fields'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
         });
         break;
     }

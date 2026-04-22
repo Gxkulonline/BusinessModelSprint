@@ -1,10 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class OfficeService {
   private baseUrl = 'http://localhost:9960/offices';
   constructor(private http: HttpClient) {}
-  getAll() { return this.http.get<any[]>(this.baseUrl); }
-  create(data: any) { return this.http.post<any>(this.baseUrl, data); }
+
+  getAll(): Observable<any[]> { 
+    return this.http.get<any>(this.baseUrl).pipe(map(res => res.data)); 
+  }
+
+  getById(id: string): Observable<any> { 
+    return this.http.get<any>(`${this.baseUrl}/${id}`).pipe(map(res => res.data)); 
+  }
+
+  create(data: any): Observable<any> { 
+    return this.http.post<any>(this.baseUrl, data).pipe(map(res => res.data)); 
+  }
+
+  delete(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/${id}`);
+  }
 }

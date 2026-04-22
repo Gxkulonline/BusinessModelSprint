@@ -62,6 +62,19 @@
       </div>
 
       <div class="p-8 overflow-y-auto">
+        <div *ngIf="successMessage" class="bg-[#064e3b] border border-[#059669] p-4 rounded-xl text-[#34d399] text-sm mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <span class="text-xl">✅</span>
+          <span class="font-medium">{{ successMessage }}</span>
+        </div>
+
+        <div *ngIf="errorMessage" class="bg-[#450a0a] border border-[#b91c1c] p-4 rounded-xl text-[#f87171] text-sm mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <span>⚠️</span>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div *ngIf="isLoading" class="flex justify-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#60a5fa]"></div>
+        </div>
         
         <div *ngIf="currentModalType === 'GET_ID' || currentModalType === 'GET_TOTAL'">
           <label class="block text-[13px] font-bold tracking-widest text-[#475569] uppercase mb-3">Customer ID</label>
@@ -76,16 +89,16 @@
           <ng-container *ngIf="currentEntity === 'PRODUCTLINE'">
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Product Line Name</label>
-              <input [(ngModel)]="newProductLine.product_line" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+              <input [(ngModel)]="newProductLine.productLine" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
             </div>
             <div>
               <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Description</label>
-              <textarea [(ngModel)]="newProductLine.text_description" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none min-h-[120px]"></textarea>
+              <textarea [(ngModel)]="newProductLine.textDescription" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none min-h-[120px]"></textarea>
             </div>
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">HTML OID</label>
-                <input [(ngModel)]="newProductLine.html_description" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newProductLine.htmlDescription" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Image OID</label>
@@ -98,11 +111,11 @@
             <div class="flex gap-4">
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Customer #</label>
-                <input [(ngModel)]="newPayment.customer_number" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newPayment.paymentId.customerNumber" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Check Number</label>
-                <input [(ngModel)]="newPayment.check_number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newPayment.paymentId.checkNumber" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
             </div>
             <div class="flex gap-4">
@@ -112,7 +125,7 @@
               </div>
               <div class="flex-1">
                 <label class="text-[12px] font-bold text-[#64748b] mb-2 block uppercase">Payment Date</label>
-                <input [(ngModel)]="newPayment.payment_date" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
+                <input [(ngModel)]="newPayment.paymentDate" type="date" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
               </div>
             </div>
           </ng-container>
@@ -132,9 +145,9 @@
             </thead>
             <tbody class="divide-y divide-[#1e293b]">
               <tr *ngFor="let item of apiResult" class="bg-[#111827] hover:bg-white/5 transition-colors">
-                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.product_line || item.check_number }}</td>
-                <td class="p-5 text-base">{{ item.text_description ? (item.text_description | slice:0:50) + '...' : ('Customer: ' + item.customer_number) }}</td>
-                <td class="p-5 text-[#94a3b8] text-base">{{ item.image || ('$' + item.amount) }}</td>
+                <td class="p-5 text-[#60a5fa] font-bold text-lg">{{ item.productLine || (item.paymentId ? item.paymentId.checkNumber : '') || item.product_line || item.check_number }}</td>
+                <td class="p-5 text-base">{{ item.textDescription || item.paymentDate || item.text_description || item.payment_date || 'N/A' }}</td>
+                <td class="p-5 text-[#94a3b8] text-base">{{ item.amount ? ('$' + item.amount) : (item.productLine || item.product_line) }}</td>
               </tr>
             </tbody>
           </table>
@@ -148,6 +161,7 @@
 
       <div class="p-8 pt-0 flex gap-4">
         <button (click)="closeModal()" class="flex-1 bg-[#1e293b] text-[#64748b] py-4 rounded-xl font-bold text-lg hover:text-[#e2e8f0] transition">Cancel</button>
+        <button *ngIf="currentModalType === 'GET_ALL'" (click)="executeAction()" class="flex-[2] bg-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-600 transition shadow-lg shadow-blue-900/20">Fetch Data</button>
         <button *ngIf="currentModalType === 'POST'" (click)="executeAction()" class="flex-[2] bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-green-900/20">Create Record</button>
       </div>
     </div>

@@ -1,52 +1,42 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of, tap, catchError, map } from 'rxjs';
 
 @Injectable({
- providedIn:'root'
+  providedIn: 'root'
 })
 export class AuthService {
+  private authUrl = 'http://localhost:9960/api/auth';
 
- users:any = {
+  constructor(private http: HttpClient) { }
 
-   yuvasri:{
-     username:'yuvasri',
-     password:'1234'
-   },
+  login(username: string, password: string): Observable<boolean> {
+    const credentials = btoa(`${username}:${password}`);
+    const headers = new HttpHeaders({
+      Authorization: `Basic ${credentials}`
+    });
 
-   gokul:{
-     username:'gokul',
-     password:'1234'
-   },
+    return this.http.get<any>(`${this.authUrl}/me`, { headers }).pipe(
+      tap(user => {
+        localStorage.setItem('credentials', credentials);
+        localStorage.setItem('user', JSON.stringify(user));
+      }),
+      map(() => true),
+      catchError(() => of(false))
+    );
+  }
 
-   darshini:{
-     username:'darshini',
-     password:'1234'
-   },
+  getUser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
 
-   keerthesha:{
-     username:'keerthesha',
-     password:'1234'
-   }
+  isLoggedIn() {
+    return !!localStorage.getItem('credentials');
+  }
 
- };
-
- login(member:string,user:string,pass:string){
-
-   const data = this.users[member];
-
-   if(data.username === user && data.password === pass){
-      localStorage.setItem('login','true');
-      return true;
-   }
-
-   return false;
- }
-
- isLoggedIn(){
-   return localStorage.getItem('login') === 'true';
- }
-
- logout(){
-   localStorage.removeItem('login');
- }
-
+  logout() {
+    localStorage.removeItem('credentials');
+    localStorage.removeItem('user');
+  }
 }

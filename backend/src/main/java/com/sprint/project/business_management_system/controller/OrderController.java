@@ -86,11 +86,15 @@ public class OrderController {
         );
     }
 
-    // ✅ GET BY STATUS -> 200 OK
+    // ✅ GET ALL OR BY STATUS -> 200 OK
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getByStatus(@RequestParam String status) {
-
-        List<OrderResponseDto> orders = service.getOrdersByStatus(status);
+    public ResponseEntity<Map<String, Object>> getOrders(@RequestParam(required = false) String status) {
+        List<OrderResponseDto> orders;
+        if (status != null && !status.isEmpty()) {
+            orders = service.getOrdersByStatus(status);
+        } else {
+            orders = service.getAllOrders();
+        }
 
         return ResponseEntity.ok(
             Map.of(
