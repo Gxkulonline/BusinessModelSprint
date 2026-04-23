@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-
+	
     @GetMapping("/me")
     public Map<String, Object> getCurrentUser(Authentication authentication) {
         Map<String, Object> userDetails = new HashMap<>();

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "orderdetails")
@@ -33,12 +34,13 @@ public class OrderDetail {
     @MapsId("orderNumber")
     @JoinColumn(name = "orderNumber", referencedColumnName = "orderNumber")
     @NotNull(message = "Order must be provided")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("productCode")
     @JoinColumn(name = "productCode", referencedColumnName = "productCode")
-    @JsonIgnore 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) 
     private Product product;
 
     // ===== GETTERS & SETTERS =====

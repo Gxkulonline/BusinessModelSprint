@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .hasAnyRole("YUVASRI", "ADMIN")
                         .requestMatchers("/orders/**", "/orderdetails/**")
                         .hasAnyRole("DHARSHINI", "ADMIN")
-                        .requestMatchers("/employees/**", "/offices/**")
+                        .requestMatchers("/employees/**", "/offices/**", "/api/reports/**")
                         .hasAnyRole("GOKUL", "ADMIN")
                         .requestMatchers(
                                 "/v3/api-docs/**",

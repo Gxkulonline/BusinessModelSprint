@@ -11,6 +11,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<boolean> {
+    this.logout();
     const credentials = btoa(`${username}:${password}`);
     const headers = new HttpHeaders({
       Authorization: `Basic ${credentials}`
@@ -18,8 +19,8 @@ export class AuthService {
 
     return this.http.get<any>(`${this.authUrl}/me`, { headers }).pipe(
       tap(user => {
-        localStorage.setItem('credentials', credentials);
-        localStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('credentials', credentials);
+        sessionStorage.setItem('user', JSON.stringify(user));
       }),
       map(() => true),
       catchError(() => of(false))
@@ -27,16 +28,16 @@ export class AuthService {
   }
 
   getUser() {
-    const user = localStorage.getItem('user');
+    const user = sessionStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   }
 
   isLoggedIn() {
-    return !!localStorage.getItem('credentials');
+    return !!sessionStorage.getItem('credentials');
   }
 
   logout() {
-    localStorage.removeItem('credentials');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('credentials');
+    sessionStorage.removeItem('user');
   }
 }

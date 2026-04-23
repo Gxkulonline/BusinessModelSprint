@@ -79,6 +79,20 @@ public class OrderDetailController {
         );
     }
 
+    // ✅ PUT -> 200 OK
+    @PutMapping
+    public ResponseEntity<Map<String, Object>> update(@RequestBody OrderDetail od) {
+        OrderDetail updated = service.update(od);
+
+        return ResponseEntity.ok(
+            Map.of(
+                "status", "success",
+                "message", "Order detail updated successfully",
+                "data", updated
+            )
+        );
+    }
+
     // ✅ DELETE -> 200 OK (JSON)
     @DeleteMapping
     public ResponseEntity<Map<String, String>> delete(@RequestBody OrderDetailId id) {

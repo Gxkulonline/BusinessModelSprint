@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
 import { OfficeService } from '../../services/office.service';
+import { ReportService } from '../../services/report.service';
 
 @Component({
   selector: 'app-gokul',
@@ -14,8 +15,8 @@ import { OfficeService } from '../../services/office.service';
 export class GokulComponent {
   isModalOpen = false;
   currentModalTitle = '';
-  currentModalType: 'GET_ALL' | 'GET_ID' | 'POST' | null = null;
-  currentEntity: 'EMPLOYEE' | 'OFFICE' | null = null;
+  currentModalType: 'GET_ALL' | 'GET_ID' | 'POST' | 'REPORT' | null = null;
+  currentEntity: 'EMPLOYEE' | 'OFFICE' | 'REPORT' | null = null;
 
   apiResult: any = null;
   isLoading: boolean = false;
@@ -52,10 +53,11 @@ export class GokulComponent {
   constructor(
     private employeeService: EmployeeService,
     private officeService: OfficeService,
+    private reportService: ReportService,
     private cdr: ChangeDetectorRef 
   ) {}
 
-  openModal(entity: 'EMPLOYEE' | 'OFFICE', type: 'GET_ALL' | 'GET_ID' | 'POST', title: string) {
+  openModal(entity: 'EMPLOYEE' | 'OFFICE' | 'REPORT', type: any, title: string) {
     this.currentEntity = entity;
     this.currentModalType = type;
     this.currentModalTitle = title;
@@ -94,8 +96,10 @@ export class GokulComponent {
 
     if (this.currentEntity === 'EMPLOYEE') {
       this.handleEmployeeActions();
-    } else {
+    } else if (this.currentEntity === 'OFFICE') {
       this.handleOfficeActions();
+    } else {
+      this.handleReportActions();
     }
   }
 
@@ -156,6 +160,35 @@ export class GokulComponent {
           }
         });
         break;
+    }
+  }
+
+  private handleReportActions() {
+    let obs: any;
+
+    if (this.currentModalTitle.includes('Customer Exposure')) {
+      obs = this.reportService.getCustomerExposure();
+    } else if (this.currentModalTitle.includes('Sales by Country')) {
+      obs = this.reportService.getSalesByCountry();
+    } else if (this.currentModalTitle.includes('Monthly Revenue')) {
+      obs = this.reportService.getMonthlyRevenue();
+    } else if (this.currentModalTitle.includes('High Risk')) {
+      obs = this.reportService.getHighRiskCustomers();
+    }
+
+    if (obs) {
+      obs.subscribe({
+        next: (res: any) => { 
+          this.apiResult = Array.isArray(res) ? res : [res]; 
+          this.isLoading = false; 
+          this.cdr.detectChanges(); 
+        },
+        error: () => { 
+          this.errorMessage = 'Failed to generate report'; 
+          this.isLoading = false; 
+          this.cdr.detectChanges(); 
+        }
+      });
     }
   }
 }

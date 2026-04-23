@@ -14,7 +14,7 @@ import { OrderDetailService } from '../../services/orderdetail.service';
 export class DarshiniComponent {
   isModalOpen = false;
   currentModalTitle = '';
-  currentModalType: 'GET_ALL' | 'GET_ID' | 'POST' | 'DELETE' | null = null;
+  currentModalType: 'GET_ALL' | 'GET_ID' | 'POST' | 'PUT' | 'DELETE' | null = null;
   currentEntity: 'ORDER' | 'ORDER_DETAIL' | null = null;
 
   apiResult: any = null;
@@ -58,7 +58,7 @@ export class DarshiniComponent {
     private cdr: ChangeDetectorRef 
   ) {}
 
-  openModal(entity: 'ORDER' | 'ORDER_DETAIL', type: 'GET_ALL' | 'GET_ID' | 'POST' | 'DELETE', title: string) {
+  openModal(entity: 'ORDER' | 'ORDER_DETAIL', type: 'GET_ALL' | 'GET_ID' | 'POST' | 'PUT' | 'DELETE', title: string) {
     this.currentEntity = entity;
     this.currentModalType = type;
     this.currentModalTitle = title;
@@ -158,7 +158,7 @@ export class DarshiniComponent {
         this.detailService.create(this.newOrderDetail).subscribe({
           next: (res) => { 
             this.apiResult = [res]; 
-            this.successMessage = 'Order line item successfully added!';
+            this.successMessage = 'Order detail successfully added!';
             this.isLoading = false; 
             this.cdr.detectChanges(); 
             setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
@@ -170,18 +170,24 @@ export class DarshiniComponent {
           }
         });
         break;
-      case 'DELETE':
-        const parts = this.searchId.split(',');
-        const idObj = parts.length === 2 ? { orderNumber: Number(parts[0]), productCode: parts[1] } : this.searchId;
-        this.detailService.delete(idObj).subscribe({
-          next: () => { 
-            this.apiResult = [{ id: idObj, status: 'DELETED' }]; 
-            this.successMessage = 'Record deleted successfully.';
+      case 'PUT':
+        // Sync relations for entity mapping
+        this.newOrderDetail.order.orderNumber = this.newOrderDetail.id.orderNumber;
+        this.newOrderDetail.product.productCode = this.newOrderDetail.id.productCode;
+
+        this.detailService.update(this.newOrderDetail).subscribe({
+          next: (res) => { 
+            this.apiResult = [res]; 
+            this.successMessage = 'Order detail updated successfully!';
             this.isLoading = false; 
             this.cdr.detectChanges(); 
             setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
           },
-          error: () => { this.errorMessage = 'Delete failed. Use format: num,code'; this.isLoading = false; this.cdr.detectChanges(); }
+          error: (err) => { 
+            this.errorMessage = 'Error updating detail: ' + (err.error?.message || 'Verify IDs and permissions'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
         });
         break;
     }

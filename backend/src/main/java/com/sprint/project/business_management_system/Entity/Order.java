@@ -6,6 +6,9 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -38,9 +41,11 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerNumber", referencedColumnName = "customerNumber")
     @NotNull(message = "Customer must be assigned")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Customer customer;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<OrderDetail> orderDetails;
 
     // ===== GETTERS & SETTERS =====

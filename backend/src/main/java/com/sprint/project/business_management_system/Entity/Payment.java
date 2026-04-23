@@ -3,6 +3,7 @@ package com.sprint.project.business_management_system.Entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "payments")
@@ -14,6 +15,7 @@ public class Payment {
     @ManyToOne
     @MapsId("customerNumber")
     @JoinColumn(name = "customer_number")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Customer customer;
 
     @Column(name = "paymentDate", nullable = false)

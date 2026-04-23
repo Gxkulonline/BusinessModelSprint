@@ -10,8 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "customers")
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class Customer {
     public Integer getCustomerNumber() {
 		return customerNumber;

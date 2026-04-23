@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sprint.project.business_management_system.Entity.Customer;
 import com.sprint.project.business_management_system.Entity.Payment;
@@ -17,6 +18,7 @@ import com.sprint.project.business_management_system.responseDto.PaymentResponse
 import com.sprint.project.business_management_system.service.PaymentService;
 
 @Service
+@Transactional
 public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
@@ -75,6 +77,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     // ----------------- GET BY CUSTOMER -----------------
     @Override
+    @Transactional(readOnly = true)
     public List<PaymentResponseDto> getPaymentsByCustomer(Integer customerId) {
 
         return paymentRepository.findAll()
@@ -86,6 +89,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     // ----------------- TOTAL AMOUNT -----------------
     @Override
+    @Transactional(readOnly = true)
     public BigDecimal getTotalAmountByCustomer(Integer customerId) {
 
         return paymentRepository.findAll()

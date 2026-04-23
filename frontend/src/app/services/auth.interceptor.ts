@@ -5,10 +5,10 @@ import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
   const router = inject(Router);
-  const credentials = localStorage.getItem('credentials');
+  const credentials = sessionStorage.getItem('credentials');
 
   let authReq = req;
-  if (credentials) {
+  if (credentials && !req.headers.has('Authorization')) {
     authReq = req.clone({
       setHeaders: {
         Authorization: `Basic ${credentials}`
@@ -20,8 +20,8 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401 || error.status === 403) {
         // Clear credentials on auth error and redirect to landing/login
-        localStorage.removeItem('credentials');
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('credentials');
+        sessionStorage.removeItem('user');
         router.navigate(['/']);
       }
       return throwError(() => error);

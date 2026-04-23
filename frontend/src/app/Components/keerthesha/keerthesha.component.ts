@@ -32,15 +32,10 @@ export class KeertheshaComponent {
   };
 
   newPayment: any = {
-    paymentId: {
-      customerNumber: null,
-      checkNumber: ''
-    },
+    customerNumber: null,
+    checkNumber: '',
     paymentDate: '',
-    amount: 0,
-    customer: {
-      customerNumber: null
-    }
+    amount: 0
   };
 
   constructor(
@@ -69,9 +64,10 @@ export class KeertheshaComponent {
   resetForms() {
     this.newProductLine = { productLine: '', textDescription: '', htmlDescription: null, image: null };
     this.newPayment = { 
-      paymentId: { customerNumber: null, checkNumber: '' }, 
-      paymentDate: '', amount: 0, 
-      customer: { customerNumber: null } 
+      customerNumber: null, 
+      checkNumber: '', 
+      paymentDate: '', 
+      amount: 0
     };
   }
 
@@ -145,9 +141,6 @@ export class KeertheshaComponent {
         });
         break;
       case 'POST':
-        // Sync ID field for entity mapping
-        this.newPayment.customer.customerNumber = this.newPayment.paymentId.customerNumber;
-
         this.paymentService.create(this.newPayment).subscribe({
           next: (res) => { 
             this.apiResult = [res]; 
@@ -157,7 +150,8 @@ export class KeertheshaComponent {
             setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
           },
           error: (err) => { 
-            this.errorMessage = 'Error saving payment: ' + (err.error?.message || 'Check IDs (Date: YYYY-MM-DD)'); 
+            const msg = err.error?.message || err.error?.errors?.[0]?.defaultMessage || err.message || 'Check IDs (Date: YYYY-MM-DD)';
+            this.errorMessage = 'Error saving payment: ' + msg; 
             this.isLoading = false; 
             this.cdr.detectChanges(); 
           }

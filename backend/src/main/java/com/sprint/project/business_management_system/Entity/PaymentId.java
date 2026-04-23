@@ -7,7 +7,10 @@ import java.util.Objects;
 @Embeddable
 public class PaymentId implements Serializable {
 
+    @jakarta.persistence.Column(name = "customer_number")
     private Integer customerNumber;
+
+    @jakarta.persistence.Column(name = "check_number")
     private String checkNumber;
 
     public Integer getCustomerNumber() {

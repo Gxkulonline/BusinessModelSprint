@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-[#0d1117] p-12 font-sans text-[#e2e8f0]">
   <header class="mb-6 max-w-7xl mx-auto">
     <h1 class="text-4xl font-extrabold text-white tracking-tight">Order & OrderDetail Endpoints</h1>
-    <p class="text-base text-[#64748b] mt-2">Manage all operations related to Orders and Line Items — Darshini</p>
+    <p class="text-base text-[#64748b] mt-2">Manage all operations related to Orders and Order Details — Darshini</p>
   </header>
 
   <div class="h-px bg-gradient-to-r from-[#1e293b] to-transparent my-10 max-w-7xl mx-auto"></div>
@@ -28,24 +28,23 @@
     </div>
 
     <div class="bg-[#111827] border border-[#1e293b] rounded-[20px] p-8 shadow-2xl">
-      <h2 class="text-2xl font-bold text-[#a78bfa] mb-8">Order Line Items</h2>
+      <h2 class="text-2xl font-bold text-[#a78bfa] mb-8">Order Details Manager</h2>
 
       <div (click)="openModal('ORDER_DETAIL', 'GET_ALL', 'All Order Details')" class="bg-[#0f2744] border border-[#1e3a5f] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
         <div class="text-[13px] font-black text-[#60a5fa] tracking-widest mb-2 uppercase">GET ALL DETAILS</div>
         <div class="text-[15px] text-[#4a7fa8] font-medium">Retrieve all line items across orders.</div>
       </div>
 
-      <div (click)="openModal('ORDER_DETAIL', 'POST', 'Add Line Item')" class="bg-[#0f2d1f] border border-[#1a4230] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+      <div (click)="openModal('ORDER_DETAIL', 'POST', 'Add Order Detail')" class="bg-[#0f2d1f] border border-[#1a4230] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
         <div class="text-[13px] font-black text-[#34d399] tracking-widest mb-2 uppercase">POST NEW DETAIL</div>
-        <div class="text-[15px] text-[#3a7a5a] font-medium">Add a product line to an existing order.</div>
+        <div class="text-[15px] text-[#3a7a5a] font-medium">Add a new detail record to an existing order.</div>
       </div>
 
-      <div class="h-px bg-[#1e293b] my-8"></div>
-
-      <div (click)="openModal('ORDER_DETAIL', 'DELETE', 'Delete Line Item')" class="bg-[#2a0f0f] border border-[#3d1818] rounded-xl p-6 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
-        <div class="text-[13px] font-black text-[#f87171] tracking-widest mb-2 uppercase">DELETE DETAIL</div>
-        <div class="text-[15px] text-[#7a3535] font-medium">Remove a specific detail entry by ID.</div>
+      <div (click)="openModal('ORDER_DETAIL', 'PUT', 'Update Order Detail')" class="bg-[#2e260f] border border-[#44381a] rounded-xl p-6 mb-4 cursor-pointer hover:brightness-125 hover:scale-[1.01] transition-all">
+        <div class="text-[13px] font-black text-[#fbbf24] tracking-widest mb-2 uppercase">PUT ORDER DETAIL</div>
+        <div class="text-[15px] text-[#8a7231] font-medium">Modify an existing quantity or price entry.</div>
       </div>
+
     </div>
   </div>
 
@@ -55,7 +54,7 @@
       <div class="p-8 border-b border-[#1e293b] flex justify-between items-start">
         <div class="flex flex-col gap-2">
           <span class="text-[13px] font-black tracking-[0.2em] uppercase"
-                [ngClass]="{'text-[#60a5fa]': currentModalType?.startsWith('GET'), 'text-[#34d399]': currentModalType==='POST', 'text-[#f87171]': currentModalType==='DELETE'}">
+                [ngClass]="{'text-[#60a5fa]': currentModalType?.startsWith('GET'), 'text-[#34d399]': currentModalType==='POST', 'text-[#fbbf24]': currentModalType==='PUT', 'text-[#f87171]': currentModalType==='DELETE'}">
             {{ currentModalType }}
           </span>
           <h3 class="text-3xl font-bold text-[#f1f5f9]">{{ currentModalTitle }}</h3>
@@ -86,7 +85,7 @@
           </div>
         </div>
 
-        <div *ngIf="currentModalType === 'POST'" class="space-y-5">
+        <div *ngIf="currentModalType === 'POST' || currentModalType === 'PUT'" class="space-y-5">
           
           <ng-container *ngIf="currentEntity === 'ORDER'">
             <div class="flex gap-4">
@@ -146,6 +145,10 @@
               <input [(ngModel)]="newOrderDetail.orderLineNumber" type="number" class="w-full bg-[#0d1117] border border-[#1e293b] rounded-xl px-4 py-3.5 text-base text-[#e2e8f0] outline-none">
             </div>
           </ng-container>
+
+          <div *ngIf="currentModalType === 'PUT'" class="bg-[#1e293b]/30 p-4 rounded-xl border border-[#fbbf24]/20 mt-4">
+            <p class="text-[13px] text-[#fbbf24] font-medium italic">NOTE: Order # and Product Code must match existing records to perform update.</p>
+          </div>
         </div>
 
         <div *ngIf="apiResult && (currentModalType === 'GET_ALL' || currentModalType === 'GET_ID')" class="mt-8 border border-[#1e293b] rounded-2xl overflow-hidden overflow-x-auto shadow-inner">
@@ -172,6 +175,7 @@
         <button (click)="closeModal()" class="flex-1 bg-[#1e293b] text-[#64748b] py-4 rounded-xl font-bold text-lg hover:text-[#e2e8f0] transition">Cancel</button>
         <button *ngIf="currentModalType === 'GET_ALL'" (click)="executeAction()" class="flex-[2] bg-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-600 transition shadow-lg shadow-blue-900/20">Fetch Data</button>
         <button *ngIf="currentModalType === 'POST'" (click)="executeAction()" class="flex-[2] bg-[#059669] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-green-900/20">Create Entry</button>
+        <button *ngIf="currentModalType === 'PUT'" (click)="executeAction()" class="flex-[2] bg-[#fbbf24] text-black py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-yellow-900/20">Update Entry</button>
         <button *ngIf="currentModalType === 'DELETE'" (click)="executeAction()" class="flex-[2] bg-[#b91c1c] text-white py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-lg shadow-red-900/20">Confirm Delete</button>
       </div>
     </div>
