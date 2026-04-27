@@ -13,7 +13,11 @@ import org.mockito.*;
 import com.sprint.project.business_management_system.Entity.Product;
 import com.sprint.project.business_management_system.Entity.ProductLine;
 import com.sprint.project.business_management_system.impl.ProductServiceImpl;
+import com.sprint.project.business_management_system.repository.ProductLineRepository;
 import com.sprint.project.business_management_system.repository.ProductRepository;
+import com.sprint.project.business_management_system.requestDto.ProductRequestDto;
+import com.sprint.project.business_management_system.responseDto.ProductResponseDto;
+import com.sprint.project.business_management_system.exception.ResourceNotFoundException;
 
 class ProductTest {
 
@@ -23,8 +27,12 @@ class ProductTest {
     @Mock
     private ProductRepository repo;
 
+    @Mock
+    private ProductLineRepository productLineRepo;
+
     private Product product;
     private ProductLine productLine;
+    private ProductRequestDto dto;
 
     @BeforeEach
     void setup() {
@@ -45,6 +53,18 @@ class ProductTest {
         product.setQuantityInStock((short) 50);
         product.setBuyPrice(new BigDecimal("1000"));
         product.setMsrp(new BigDecimal("1500"));
+
+        // Sample DTO
+        dto = new ProductRequestDto();
+        dto.setProductCode("P100");
+        dto.setProductName("Car Model X");
+        dto.setProductLine("Classic Cars");
+        dto.setProductScale("1:10");
+        dto.setProductVendor("Vendor A");
+        dto.setProductDesc("Sample Product");
+        dto.setQuantityInStock((short) 50);
+        dto.setBuyPrice(new BigDecimal("1000"));
+        dto.setMsrp(new BigDecimal("1500"));
     }
 
     // -------- 10 IMPORTANT TEST CASES --------
@@ -74,22 +94,24 @@ class ProductTest {
     @Test
     void testGetProductByIdNotFound() {
         when(repo.findById("P100")).thenReturn(Optional.empty());
-        assertNull(service.getProductById("P100"));
+        assertThrows(ResourceNotFoundException.class, () -> service.getProductById("P100"));
     }
 
     // 5. Save product - success
     @Test
     void testSaveProduct() {
-        when(repo.save(product)).thenReturn(product);
-        assertNotNull(service.saveProduct(product));
+        when(productLineRepo.findById("Classic Cars")).thenReturn(Optional.of(productLine));
+        when(repo.save(any())).thenReturn(product);
+        assertNotNull(service.saveProduct(dto));
     }
 
     // 6. Save product - verify repository call
     @Test
     void testSaveProductVerify() {
-        when(repo.save(product)).thenReturn(product);
-        service.saveProduct(product);
-        verify(repo).save(product);
+        when(productLineRepo.findById("Classic Cars")).thenReturn(Optional.of(productLine));
+        when(repo.save(any())).thenReturn(product);
+        service.saveProduct(dto);
+        verify(repo).save(any());
     }
 
     // 7. Get products by product line - success
@@ -123,9 +145,10 @@ class ProductTest {
     // 10. Validate product fields after save
     @Test
     void testProductDataIntegrity() {
-        when(repo.save(product)).thenReturn(product);
+        when(productLineRepo.findById("Classic Cars")).thenReturn(Optional.of(productLine));
+        when(repo.save(any())).thenReturn(product);
 
-        Product result = service.saveProduct(product);
+        ProductResponseDto result = service.saveProduct(dto);
 
         assertEquals("P100", result.getProductCode());
         assertEquals("Car Model X", result.getProductName());

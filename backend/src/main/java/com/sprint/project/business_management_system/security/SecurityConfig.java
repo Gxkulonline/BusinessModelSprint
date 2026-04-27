@@ -16,16 +16,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class SecurityConfig {
 
+	//creating an encrypt password object in spring container
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // basic security chain  Authentication → Who are you?
+    //    Authorization → What can you access?
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+      
+    	  http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//    	  CSRF is when a malicious site tricks a logged-in user’s browser to send unwanted requests.
+//    	  We disable it in REST APIs because we don’t use session-based authentication.
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/me").authenticated()
@@ -46,7 +51,7 @@ public class SecurityConfig {
                 .httpBasic();
         return http.build();
     }
-
+//This is a CORS (Cross-Origin Resource Sharing) configuration bean in Spring Boot. It controls which frontend (like your Angular app) is allowed to talk to your backend.
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();

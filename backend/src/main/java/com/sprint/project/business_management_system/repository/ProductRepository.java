@@ -18,6 +18,6 @@ import com.sprint.project.business_management_system.Entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, String> {
 
-    // ✅ This navigates into ProductLine entity and matches its 'productLine' field
+    //  This navigates into ProductLine entity and matches its 'productLine' field
     List<Product> findByProductLine_ProductLine(String productLine);
 }

@@ -13,6 +13,7 @@ import com.sprint.project.business_management_system.requestDto.OrderRequestDto;
 import com.sprint.project.business_management_system.responseDto.OrderResponseDto;
 import com.sprint.project.business_management_system.service.OrderService;
 
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -48,7 +49,6 @@ public class OrderServiceImpl implements OrderService {
         dto.setOrderNumber(o.getOrderNumber());
         dto.setOrderDate(o.getOrderDate());
         dto.setStatus(o.getStatus());
-
         return dto;
     }
 
@@ -74,4 +74,7 @@ public class OrderServiceImpl implements OrderService {
                 .map(this::mapToDto)
                 .toList();
     }
-}
+
+
+}
+

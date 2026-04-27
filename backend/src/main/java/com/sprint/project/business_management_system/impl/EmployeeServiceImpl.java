@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sprint.project.business_management_system.Entity.Employee;
 import com.sprint.project.business_management_system.Entity.Office;
+import com.sprint.project.business_management_system.exception.ResourceNotFoundException;
 import com.sprint.project.business_management_system.repository.EmployeeRepository;
 import com.sprint.project.business_management_system.repository.OfficeRepository;
 import com.sprint.project.business_management_system.requestDto.EmployeeRequestDto;
@@ -22,7 +23,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private OfficeRepository officeRepo;
-
+//req
     private Employee mapToEntity(EmployeeRequestDto dto) {
         Employee e = new Employee();
 
@@ -35,19 +36,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         // Office mapping
         Office office = officeRepo.findById(dto.getOffice().getOfficeCode())
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("office not found"));
         e.setOffice(office);
 
         // Manager mapping
         if (dto.getReportsTo() != null) {
             Employee manager = employeeRepo.findById(dto.getReportsTo())
-                    .orElseThrow();
+                    .orElseThrow(() -> new ResourceNotFoundException("Employee Manager not found"));
             e.setManager(manager);
         }
 
         return e;
     }
-
+//response
     private EmployeeResponseDto mapToDto(Employee e) {
         EmployeeResponseDto dto = new EmployeeResponseDto();
 
@@ -67,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public EmployeeResponseDto getById(Integer id) {
-        Employee e = employeeRepo.findById(id).orElseThrow();
+        Employee e = employeeRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee Manager not found"));
         return mapToDto(e);
     }
 
@@ -75,25 +76,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee saved = employeeRepo.save(mapToEntity(dto));
         return mapToDto(saved);
     }
+
+    public void delete(Integer id) {
+        if (!employeeRepo.existsById(id)) {
+            throw new ResourceNotFoundException("Employee not found with ID: " + id);
+        }
+        employeeRepo.deleteById(id);
+    }
 }
-//@Service
-//public class EmployeeServiceImpl implements EmployeeService {
-//    @Autowired
-//    private EmployeeRepository repo;
-//    public Employee saveEmployee(Employee e) {
-//        return repo.save(e);
-//    }
-//    public List<Employee> getAllEmployees() {
-//        return repo.findAll();
-//    }
-//    public Employee getEmployeeById(Integer id) {
-//        return repo.findById(id).orElse(null);
-//    }
-//    public Employee getManager(Integer id) {
-//        Employee emp = repo.findById(id).orElseThrow();
-//        return emp.getManager();
-//    }
-//    public List<Employee> getSubordinates(Integer id) {
-//        return repo.findByManagerEmployeeNumber(id);
-//    }
-//}

@@ -9,7 +9,7 @@ import com.sprint.project.business_management_system.Entity.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     List<Customer> findByCountry(String country);
-    @Query("SELECT p FROM Product p WHERE p.buyPrice > :price")
+    @Query("SELECT c FROM Customer c WHERE c.creditLimit > :price")
     List<Customer> findAllByOrderByCreditLimitDesc();
 
 }

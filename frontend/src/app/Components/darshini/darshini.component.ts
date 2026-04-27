@@ -14,7 +14,7 @@ import { OrderDetailService } from '../../services/orderdetail.service';
 export class DarshiniComponent {
   isModalOpen = false;
   currentModalTitle = '';
-  currentModalType: 'GET_ALL' | 'GET_ID' | 'POST' | 'PUT' | 'DELETE' | null = null;
+  currentModalType: 'GET_ALL' | 'GET_ID' | 'POST' | 'PUT' | null = null;
   currentEntity: 'ORDER' | 'ORDER_DETAIL' | null = null;
 
   apiResult: any = null;
@@ -58,7 +58,7 @@ export class DarshiniComponent {
     private cdr: ChangeDetectorRef 
   ) {}
 
-  openModal(entity: 'ORDER' | 'ORDER_DETAIL', type: 'GET_ALL' | 'GET_ID' | 'POST' | 'PUT' | 'DELETE', title: string) {
+  openModal(entity: 'ORDER' | 'ORDER_DETAIL', type: 'GET_ALL' | 'GET_ID' | 'POST' | 'PUT', title: string) {
     this.currentEntity = entity;
     this.currentModalType = type;
     this.currentModalTitle = title;
@@ -139,6 +139,7 @@ export class DarshiniComponent {
           }
         });
         break;
+
     }
   }
 
@@ -190,6 +191,7 @@ export class DarshiniComponent {
           }
         });
         break;
+
     }
   }
 }

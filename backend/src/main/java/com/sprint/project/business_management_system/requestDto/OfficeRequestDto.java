@@ -1,18 +1,21 @@
 package com.sprint.project.business_management_system.requestDto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class OfficeRequestDto {
 
     @NotBlank(message = "Office code cannot be empty")
+    @Pattern(regexp = "^[0-9]+$", message = "Office code must contain only numbers")
     private String officeCode;
 
     @NotBlank(message = "City cannot be empty")
     private String city;
 
     @NotBlank(message = "Phone cannot be empty")
-    @Size(min = 10, max = 15, message = "Phone number must be valid")
+    @Size(min = 10, max = 15, message = "Phone number must be between 10 and 15 digits")
+    @Pattern(regexp = "^[0-9]+$", message = "Phone number must contain only numbers")
     private String phone;
 
     @NotBlank(message = "Address Line 1 cannot be empty")

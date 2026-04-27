@@ -14,6 +14,7 @@ import com.sprint.project.business_management_system.impl.EmployeeServiceImpl;
 import com.sprint.project.business_management_system.repository.*;
 import com.sprint.project.business_management_system.requestDto.EmployeeRequestDto;
 import com.sprint.project.business_management_system.requestDto.EmployeeRequestDto.OfficeDto;
+import com.sprint.project.business_management_system.exception.ResourceNotFoundException;
 
 class EmployeeTest {
 
@@ -66,7 +67,7 @@ class EmployeeTest {
 
     @Test void t3_notFound() {
         when(employeeRepo.findById(1)).thenReturn(Optional.empty());
-        assertThrows(NoSuchElementException.class, () -> service.getById(1));
+        assertThrows(ResourceNotFoundException.class, () -> service.getById(1));
     }
 
     @Test void t4_save() {
@@ -84,7 +85,7 @@ class EmployeeTest {
 
     @Test void t6_officeFail() {
         when(officeRepo.findById("OF1")).thenReturn(Optional.empty());
-        assertThrows(NoSuchElementException.class, () -> service.save(dto));
+        assertThrows(ResourceNotFoundException.class, () -> service.save(dto));
     }
 
     @Test void t7_managerSuccess() {
@@ -101,7 +102,7 @@ class EmployeeTest {
         when(employeeRepo.findById(2)).thenReturn(Optional.empty());
         when(officeRepo.findById("OF1")).thenReturn(Optional.of(office));
 
-        assertThrows(NoSuchElementException.class, () -> service.save(dto));
+        assertThrows(ResourceNotFoundException.class, () -> service.save(dto));
     }
 
     @Test void t9_mapping() {
@@ -115,10 +116,7 @@ class EmployeeTest {
         verify(employeeRepo).findAll();
     }
 
-    // DTO VALIDATION
-//    @Test void t11_validDto() {
-//        assertTrue(validator.validate(dto).isEmpty());
-//    }
+  
 
     @Test void t12_invalidName() {
         dto.setFirstName("");

@@ -1,71 +1,32 @@
-<div class="min-h-screen bg-slate-950 text-white">
-
-  <!-- Navbar -->
-  <nav class="flex justify-between items-center px-8 py-5 border-b border-slate-700">
-    <h1 class="text-2xl font-bold text-cyan-400">
-      Classic Business Platform
-    </h1>
-
-    <div class="space-x-8 text-gray-300">
-      <a href="#" class="hover:text-white">Home</a>
-      <a href="#" class="hover:text-white">Members</a>
-      <a href="#" class="hover:text-white">Docs</a>
-      <a href="#" class="hover:text-white">Sign In</a>
+<div class="min-h-screen bg-blue-50 p-8 font-sans">
+  <div class="max-w-6xl mx-auto">
+    
+    <!-- Simplified Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800">Classic Business Platform</h1>
+      <p class="text-gray-600 mt-2 text-lg">Select a member portal to continue</p>
     </div>
-  </nav>
 
-  <!-- Hero Section -->
-  <section
-    class="text-center py-16 bg-gradient-to-r from-indigo-950 via-blue-900 to-slate-900"
-  >
-    <h2 class="text-5xl font-bold mb-4">
-      Welcome to Classic Business Platform
-    </h2>
-
-    <p class="text-xl text-gray-300">
-      Select a member portal to continue
-    </p>
-  </section>
-
-  <!-- Members -->
-  <section class="px-10 py-14">
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-
-      <div
-        *ngFor="let member of members"
-        (click)="openLogin(member.id)"
-        class="bg-white text-gray-800 rounded-2xl shadow-xl p-8 text-center cursor-pointer hover:scale-105 hover:shadow-cyan-500/30 transition duration-300"
+    <!-- Member Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div 
+        *ngFor="let member of members" 
+        (click)="openLogin(member.id)" 
+        class="bg-white p-8 rounded-lg border border-gray-200 shadow-sm text-center cursor-pointer hover:border-blue-500 transition-colors"
       >
-
-        <!-- Avatar -->
-        <div
-          class="w-20 h-20 mx-auto rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white flex items-center justify-center text-2xl font-bold"
-        >
+        <!-- Simple Avatar -->
+        <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
           {{ member.name.charAt(0) }}
         </div>
 
-        <!-- Name -->
-        <h3 class="mt-5 text-xl font-semibold">
-          {{ member.name }}
-        </h3>
-
-        <!-- Role -->
-        <p class="text-gray-500 mt-1">
-          Team Member
-        </p>
-
-        <!-- Button -->
-        <button
-          class="mt-6 px-6 py-2 rounded-xl border border-slate-300 hover:bg-slate-100 transition"
-        >
-          Enter
+        <h2 class="text-xl font-bold text-gray-800">{{ member.name }}</h2>
+        <p class="text-gray-500 mb-6">Team Member</p>
+        
+        <button class="w-full py-2 bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition-colors">
+          Enter Portal
         </button>
-
       </div>
-
     </div>
 
-  </section>
-
+  </div>
 </div>

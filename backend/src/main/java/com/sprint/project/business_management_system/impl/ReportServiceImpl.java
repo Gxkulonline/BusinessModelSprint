@@ -5,17 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Map;
-
 @Service
 @Transactional(readOnly = true)
 public class ReportServiceImpl implements ReportService {
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
     @Override
     public List<Map<String, Object>> getCustomerExposure() {
         String sql = "SELECT c.customer_number, c.customer_name, c.credit_limit, " +
@@ -26,8 +22,6 @@ public class ReportServiceImpl implements ReportService {
                      "GROUP BY c.customer_number, c.customer_name, c.credit_limit";
         return jdbcTemplate.queryForList(sql);
     }
-
-
     @Override
     public List<Map<String, Object>> getSalesByCountry() {
         String sql = "SELECT c.country, SUM(od.quantity_ordered * od.price_each) as total_sales " +
@@ -38,8 +32,6 @@ public class ReportServiceImpl implements ReportService {
                      "ORDER BY total_sales DESC";
         return jdbcTemplate.queryForList(sql);
     }
-
-
     @Override
     public List<Map<String, Object>> getMonthlyRevenue() {
         String sql = "SELECT EXTRACT(YEAR FROM o.order_date) as year, " +
@@ -51,7 +43,6 @@ public class ReportServiceImpl implements ReportService {
                      "ORDER BY year DESC, month DESC";
         return jdbcTemplate.queryForList(sql);
     }
-
     @Override
     public List<Map<String, Object>> getHighRiskCustomers() {
         String sql = "SELECT * FROM (" +

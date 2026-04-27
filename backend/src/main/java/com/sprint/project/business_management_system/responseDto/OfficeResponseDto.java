@@ -1,8 +1,5 @@
 package com.sprint.project.business_management_system.responseDto;
 
-import lombok.Data;
-
-@Data
 public class OfficeResponseDto {
     private String officeCode;
     private String city;

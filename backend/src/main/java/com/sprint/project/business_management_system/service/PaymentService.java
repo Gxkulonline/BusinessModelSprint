@@ -9,10 +9,7 @@ import com.sprint.project.business_management_system.responseDto.PaymentResponse
 public interface PaymentService {
 
     List<PaymentResponseDto> getAllPayments();
-
     PaymentResponseDto createPayment(PaymentRequestDto dto);
-
     List<PaymentResponseDto> getPaymentsByCustomer(Integer customerId);
-
     BigDecimal getTotalAmountByCustomer(Integer customerId);
 }

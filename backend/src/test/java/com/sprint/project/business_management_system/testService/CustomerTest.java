@@ -15,6 +15,8 @@ import com.sprint.project.business_management_system.impl.CustomerServiceImpl;
 import com.sprint.project.business_management_system.repository.*;
 import com.sprint.project.business_management_system.requestDto.CustomerRequestDto;
 import com.sprint.project.business_management_system.requestDto.CustomerRequestDto.SalesRepDto;
+import com.sprint.project.business_management_system.exception.BusinessException;
+import com.sprint.project.business_management_system.exception.ResourceNotFoundException;
 
 class CustomerTest {
 
@@ -68,7 +70,7 @@ class CustomerTest {
 
     @Test void test3_notFound() {
         when(repo.findById(1)).thenReturn(Optional.empty());
-        assertThrows(NoSuchElementException.class, () -> service.getCustomerById(1));
+        assertThrows(ResourceNotFoundException.class, () -> service.getCustomerById(1));
     }
 
     @Test void test4_save() {
@@ -99,7 +101,7 @@ class CustomerTest {
         dto.setSalesRepEmployee(rep);
 
         when(employeeRepo.findById(101)).thenReturn(Optional.empty());
-        assertThrows(NoSuchElementException.class, () -> service.saveCustomer(dto));
+        assertThrows(ResourceNotFoundException.class, () -> service.saveCustomer(dto));
     }
 
     @Test void test8_delete() {
@@ -117,11 +119,6 @@ class CustomerTest {
         assertEquals("ABC Pvt Ltd", service.getAllCustomers().get(0).getCustomerName());
     }
 
-    // DTO VALIDATION
-//    @Test void test11_dtoValid() {
-//        assertTrue(validator.validate(dto).isEmpty());
-//    }
-
     @Test void test12_dtoInvalidName() {
         dto.setCustomerName("");
         assertFalse(validator.validate(dto).isEmpty());
@@ -130,5 +127,10 @@ class CustomerTest {
     @Test void test13_dtoInvalidPhone() {
         dto.setPhone("123");
         assertFalse(validator.validate(dto).isEmpty());
+    }
+
+    @Test void test14_negativeCreditLimit() {
+        dto.setCreditLimit(new BigDecimal("-100"));
+        assertThrows(BusinessException.class, () -> service.saveCustomer(dto));
     }
 }

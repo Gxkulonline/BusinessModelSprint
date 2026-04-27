@@ -8,9 +8,11 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+
+
 @Entity
 @Table(name = "customers")
-
+  //getters and setters
 public class Customer {
     public Integer getCustomerNumber() {
 		return customerNumber;

@@ -1,37 +1,4 @@
-//package com.sprint.project.business_management_system.controller;
-//
-//import java.util.List;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.*;
-//import com.sprint.project.business_management_system.Entity.Employee;
-//import com.sprint.project.business_management_system.requestDto.EmployeeRequestDto;
-//import com.sprint.project.business_management_system.responseDto.EmployeeResponseDto;
-//import com.sprint.project.business_management_system.service.EmployeeService;
-//
-//import jakarta.validation.Valid;
-//
-//@RestController
-//@RequestMapping("/employees")
-//public class EmployeeController {
-//
-//    @Autowired
-//    private EmployeeService service;
-//
-//    @GetMapping
-//    public List<EmployeeResponseDto> getAll() {
-//        return service.getAll();
-//    }
-//
-//    @GetMapping("/{id}")
-//    public EmployeeResponseDto getById(@PathVariable Integer id) {
-//        return service.getById(id);
-//    }
-//
-//    @PostMapping
-//    public EmployeeResponseDto save(@Valid @RequestBody EmployeeRequestDto dto) {
-//        return service.save(dto);
-//    }
-//}
+
 package com.sprint.project.business_management_system.controller;
 
 import java.util.List;
@@ -93,6 +60,18 @@ public class EmployeeController {
                 "status", "success",
                 "message", "Employee created successfully",
                 "data", saved
+            )
+        );
+    }
+
+    // ✅ DELETE -> 200 OK
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Integer id) {
+        service.delete(id);
+        return ResponseEntity.ok(
+            Map.of(
+                "status", "success",
+                "message", "Employee deleted successfully"
             )
         );
     }

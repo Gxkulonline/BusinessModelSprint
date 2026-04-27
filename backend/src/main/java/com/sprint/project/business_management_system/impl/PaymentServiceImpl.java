@@ -27,14 +27,13 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    // ----------------- MAPPER -----------------
+  
     private PaymentResponseDto mapToDto(Payment payment) {
 
         PaymentResponseDto dto = new PaymentResponseDto();
 
         dto.setCustomerNumber(payment.getPaymentId().getCustomerNumber());
         dto.setCheckNumber(payment.getPaymentId().getCheckNumber());
-
         dto.setPaymentDate(payment.getPaymentDate());
         dto.setAmount(payment.getAmount());
 

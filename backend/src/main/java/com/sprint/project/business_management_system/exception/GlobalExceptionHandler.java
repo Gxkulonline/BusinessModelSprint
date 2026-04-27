@@ -10,7 +10,6 @@ public class GlobalExceptionHandler {
 
 
     // Resource Not Found
-	
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleNotFound(ResourceNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
@@ -22,12 +21,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleDuplicate(DuplicateResourceException ex) 
     
     {
+//    	Duplicate
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     // Bad Request
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<String> handleBadRequest(BadRequestException ex) {
+    	//validation fails
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
@@ -37,7 +38,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    // Generic Exception
+    // General Exception
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneral(Exception ex) {
         return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);

@@ -11,11 +11,6 @@ public interface EmployeeService {
     EmployeeResponseDto getById(Integer id);
 
     EmployeeResponseDto save(EmployeeRequestDto dto);
+
+    void delete(Integer id);
 }
-//public interface EmployeeService {
-//    Employee saveEmployee(Employee e);
-//    List<Employee> getAllEmployees();
-//    Employee getEmployeeById(Integer id);
-//    Employee getManager(Integer id);
-//    List<Employee> getSubordinates(Integer id);
-//}

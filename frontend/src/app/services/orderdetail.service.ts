@@ -23,7 +23,7 @@ export class OrderDetailService {
     return this.http.put<any>(this.baseUrl, data).pipe(map(res => res.data)); 
   }
 
-  delete(id: any): Observable<any> {
-    return this.http.delete<any>(this.baseUrl, { body: id });
+  delete(orderNumber: number, productCode: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/${orderNumber}/${productCode}`);
   }
 }

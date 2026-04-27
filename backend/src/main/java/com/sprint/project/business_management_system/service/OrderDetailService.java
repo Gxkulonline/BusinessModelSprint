@@ -23,7 +23,5 @@ public class OrderDetailService {
     public OrderDetail update(OrderDetail od) {
         return repo.save(od); // JPA save handles updates if ID is present
     }
-    public void delete(OrderDetailId id) {
-        repo.deleteById(id);
-    }
+
 }

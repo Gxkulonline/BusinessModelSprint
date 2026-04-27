@@ -46,9 +46,7 @@ export class YuvasriComponent {
   newProduct: any = {
     productCode: '',
     productName: '',
-    productLine: {
-      productLine: ''
-    },
+    productLine: '',
     productScale: '',
     productVendor: '',
     productDesc: '',
@@ -91,7 +89,7 @@ export class YuvasriComponent {
       postalCode: '', country: '', creditLimit: 0, salesRepEmployee: { employeeNumber: null } 
     };
     this.newProduct = { 
-      productCode: '', productName: '', productLine: { productLine: '' }, 
+      productCode: '', productName: '', productLine: '', 
       productScale: '', productVendor: '', productDesc: '', 
       quantityInStock: 0, buyPrice: 0, msrp: 0 
     };
@@ -191,6 +189,22 @@ export class YuvasriComponent {
           error: (err) => { 
             console.error(err);
             this.errorMessage = 'Error saving product: ' + (err.error?.message || 'Check required fields'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
+        });
+        break;
+      case 'DELETE':
+        this.productService.delete(this.searchId).subscribe({
+          next: () => { 
+            this.apiResult = [{ productCode: this.searchId, productName: 'REMOVED FROM CATALOG' }]; 
+            this.successMessage = 'Product successfully deleted!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.successMessage = ''; this.cdr.detectChanges(); }, 5000);
+          },
+          error: (err) => { 
+            this.errorMessage = 'Product deletion failed: ' + (err.error?.message || 'Not found'); 
             this.isLoading = false; 
             this.cdr.detectChanges(); 
           }

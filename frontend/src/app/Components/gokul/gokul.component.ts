@@ -15,7 +15,7 @@ import { ReportService } from '../../services/report.service';
 export class GokulComponent {
   isModalOpen = false;
   currentModalTitle = '';
-  currentModalType: 'GET_ALL' | 'GET_ID' | 'POST' | 'REPORT' | null = null;
+  currentModalType: 'GET_ALL' | 'GET_ID' | 'POST' | 'REPORT' | 'DELETE' | null = null;
   currentEntity: 'EMPLOYEE' | 'OFFICE' | 'REPORT' | null = null;
 
   apiResult: any = null;
@@ -133,6 +133,21 @@ export class GokulComponent {
           }
         });
         break;
+      case 'DELETE':
+        this.employeeService.delete(this.searchId).subscribe({
+          next: () => { 
+            this.successMessage = 'Employee record deleted successfully!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.closeModal(); }, 2000);
+          },
+          error: (err) => { 
+            this.errorMessage = 'Error deleting employee: ' + (err.error?.message || 'Employee not found'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
+        });
+        break;
     }
   }
 
@@ -155,6 +170,21 @@ export class GokulComponent {
           },
           error: (err) => { 
             this.errorMessage = 'Error saving office: ' + (err.error?.message || 'Check required fields'); 
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+          }
+        });
+        break;
+      case 'DELETE':
+        this.officeService.delete(this.searchId).subscribe({
+          next: () => { 
+            this.successMessage = 'Office location deleted successfully!';
+            this.isLoading = false; 
+            this.cdr.detectChanges(); 
+            setTimeout(() => { this.closeModal(); }, 2000);
+          },
+          error: (err) => { 
+            this.errorMessage = 'Error deleting office: ' + (err.error?.message || 'Office not found'); 
             this.isLoading = false; 
             this.cdr.detectChanges(); 
           }
