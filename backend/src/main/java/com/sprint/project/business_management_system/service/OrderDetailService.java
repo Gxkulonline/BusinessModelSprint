@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sprint.project.business_management_system.Entity.OrderDetail;
-import com.sprint.project.business_management_system.Entity.OrderDetailId;
+import com.sprint.project.business_management_system.entity.OrderDetail;
+import com.sprint.project.business_management_system.entity.OrderDetailId;
 import com.sprint.project.business_management_system.repository.OrderDetailRepository;
 @Service
 @Transactional

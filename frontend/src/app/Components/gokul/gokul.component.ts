@@ -13,6 +13,7 @@ import { ReportService } from '../../services/report.service';
   styleUrls: ['./gokul.component.css']
 })
 export class GokulComponent {
+  
   isModalOpen = false;
   currentModalTitle = '';
   currentModalType: 'GET_ALL' | 'GET_ID' | 'POST' | 'REPORT' | 'DELETE' | null = null;
@@ -24,7 +25,7 @@ export class GokulComponent {
   successMessage: string = '';
   searchId: string = '';
 
-  // Matching backend camelCase and structure
+  
   newEmployee: any = {
     employeeNumber: null,
     firstName: '',
@@ -62,13 +63,14 @@ export class GokulComponent {
     this.currentModalType = type;
     this.currentModalTitle = title;
     this.isModalOpen = true;
+    
     this.apiResult = null;
     this.errorMessage = '';
     this.successMessage = '';
     this.searchId = '';
     if (type === 'POST') this.resetForms();
     
-    // Auto-fetch if it's a GET_ALL request
+   
     if (type === 'GET_ALL') {
       this.executeAction();
     }
@@ -159,6 +161,13 @@ export class GokulComponent {
           error: () => { this.errorMessage = 'Failed to fetch offices'; this.isLoading = false; this.cdr.detectChanges(); }
         });
         break;
+      case 'GET_ID':
+        this.officeService.getById(this.searchId).subscribe({
+          next: (res) => { this.apiResult = res ? [res] : []; this.isLoading = false; this.cdr.detectChanges(); },
+          error: () => { this.errorMessage = 'Office not found'; this.isLoading = false; this.cdr.detectChanges(); }
+        });
+        break;
+
       case 'POST':
         this.officeService.create(this.newOffice).subscribe({
           next: (res) => { 

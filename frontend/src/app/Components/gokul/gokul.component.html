@@ -46,6 +46,11 @@
           <div class="text-gray-700">Retrieve the full list of global offices.</div>
         </div>
 
+        <div (click)="openModal('OFFICE', 'GET_ID', 'Find Office by ID')" class="p-4 bg-blue-50 border border-blue-200 rounded cursor-pointer hover:bg-blue-100 transition-colors">
+          <div class="font-bold text-blue-800 text-sm mb-1 uppercase">GET OFFICE BY ID</div>
+          <div class="text-gray-700">Fetch detailed info for a specific office.</div>
+        </div>
+
         <div (click)="openModal('OFFICE', 'POST', 'Add New Office')" class="p-4 bg-green-50 border border-green-200 rounded cursor-pointer hover:bg-green-100 transition-colors">
           <div class="font-bold text-green-800 text-sm mb-1 uppercase">POST NEW OFFICE</div>
           <div class="text-gray-700">Establish a new office branch record.</div>
@@ -114,7 +119,7 @@
         <div *ngIf="currentModalType === 'GET_ID' || currentModalType === 'DELETE'" class="mb-6">
           <label class="block text-sm font-bold text-gray-600 mb-2">{{ currentEntity === 'EMPLOYEE' ? 'EMPLOYEE ID' : 'OFFICE CODE' }}</label>
           <div class="flex gap-2">
-            <input [(ngModel)]="searchId" type="text" placeholder="e.g., 1002 or 1" class="flex-1 border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500">
+            <input [(ngModel)]="searchId" type="number" placeholder="e.g., 1002 or 1" class="flex-1 border border-gray-300 rounded px-4 py-2 outline-none focus:border-blue-500">
             <button (click)="executeAction()" [className]="currentModalType === 'DELETE' ? 'bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700' : 'bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700'">
               {{ currentModalType === 'DELETE' ? 'Delete' : 'Fetch' }}
             </button>
@@ -126,7 +131,7 @@
           <ng-container *ngIf="currentEntity === 'EMPLOYEE'">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="text-xs font-bold text-gray-600 mb-1 block">EMP #</label>
+                <label class="text-xs font-bold text-gray-600 mb-1 block">EMP *</label>
                 <input [(ngModel)]="newEmployee.employeeNumber" type="number" class="w-full border border-gray-300 rounded px-4 py-2">
               </div>
               <div>
@@ -146,7 +151,7 @@
                 <input [(ngModel)]="newEmployee.jobTitle" class="w-full border border-gray-300 rounded px-4 py-2">
               </div>
               <div>
-                <label class="text-xs font-bold text-gray-600 mb-1 block">OFFICE CODE</label>
+                <label class="text-xs font-bold text-gray-600 mb-1 block ">OFFICE CODE</label>
                 <input [(ngModel)]="newEmployee.office.officeCode" class="w-full border border-gray-300 rounded px-4 py-2">
               </div>
             </div>
@@ -196,14 +201,14 @@
               </div>
             </div>
           </ng-container>
-
+ 
           <ng-container *ngIf="currentEntity === 'REPORT'">
             <div *ngIf="currentModalTitle === 'Order Value'" class="mb-4">
               <label class="text-xs font-bold text-gray-600 mb-1 block uppercase">ORDER NUMBER</label>
               <input [(ngModel)]="searchId" type="number" placeholder="Enter Order ID..." class="w-full border border-gray-300 rounded px-4 py-2">
             </div>
             <div *ngIf="currentModalTitle !== 'Order Value'" class="p-3 bg-blue-50 border border-blue-200 rounded text-blue-700 text-sm">
-              ✨ No filters required. System will generate the full analytical aggregation.
+    
             </div>
           </ng-container>
         </div>

@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sprint.project.business_management_system.Entity.Customer;
-import com.sprint.project.business_management_system.Entity.Order;
+import com.sprint.project.business_management_system.entity.Customer;
+import com.sprint.project.business_management_system.entity.Order;
+import com.sprint.project.business_management_system.exception.ResourceNotFoundException;
 import com.sprint.project.business_management_system.repository.CustomerRepository;
 import com.sprint.project.business_management_system.repository.OrderRepository;
 import com.sprint.project.business_management_system.requestDto.OrderRequestDto;
@@ -57,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public OrderResponseDto getOrderById(Integer id) {
-        return mapToDto(orderRepo.findById(id).orElseThrow());
+        return mapToDto(orderRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("order not found")));
     }
 
     public List<OrderResponseDto> getOrdersByStatus(String status) {
@@ -77,4 +78,4 @@ public class OrderServiceImpl implements OrderService {
 
 
 }
-
+

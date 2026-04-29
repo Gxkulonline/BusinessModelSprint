@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import com.sprint.project.business_management_system.Entity.Employee;
-import com.sprint.project.business_management_system.Entity.Office;
+import com.sprint.project.business_management_system.entity.Employee;
+import com.sprint.project.business_management_system.entity.Office;
 import com.sprint.project.business_management_system.impl.OfficeServiceImpl;
 import com.sprint.project.business_management_system.repository.EmployeeRepository;
 import com.sprint.project.business_management_system.repository.OfficeRepository;

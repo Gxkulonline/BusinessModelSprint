@@ -11,10 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import com.sprint.project.business_management_system.Entity.Customer;
-import com.sprint.project.business_management_system.Entity.Order;
+import com.sprint.project.business_management_system.entity.Customer;
+import com.sprint.project.business_management_system.entity.Order;
 import com.sprint.project.business_management_system.impl.OrderServiceImpl;
 import com.sprint.project.business_management_system.repository.CustomerRepository;
+import com.sprint.project.business_management_system.exception.ResourceNotFoundException;
 import com.sprint.project.business_management_system.repository.OrderRepository;
 import com.sprint.project.business_management_system.requestDto.OrderRequestDto;
 import com.sprint.project.business_management_system.requestDto.OrderRequestDto.CustomerDto;
@@ -109,7 +110,7 @@ class OrderTest {
     void testGetOrderByIdNotFound() {
         when(orderRepo.findById(1001)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> service.getOrderById(1001));
     }
 

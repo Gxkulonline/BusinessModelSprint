@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.sprint.project.business_management_system.Entity.OrderDetail;
-import com.sprint.project.business_management_system.Entity.OrderDetailId;
+import com.sprint.project.business_management_system.entity.OrderDetail;
+import com.sprint.project.business_management_system.entity.OrderDetailId;
 import com.sprint.project.business_management_system.service.OrderDetailService;
 
 @RestController

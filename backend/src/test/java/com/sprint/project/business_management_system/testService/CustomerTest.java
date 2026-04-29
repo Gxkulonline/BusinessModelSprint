@@ -10,7 +10,7 @@ import jakarta.validation.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 
-import com.sprint.project.business_management_system.Entity.*;
+import com.sprint.project.business_management_system.entity.*;
 import com.sprint.project.business_management_system.impl.CustomerServiceImpl;
 import com.sprint.project.business_management_system.repository.*;
 import com.sprint.project.business_management_system.requestDto.CustomerRequestDto;

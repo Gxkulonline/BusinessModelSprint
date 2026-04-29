@@ -1,13 +1,12 @@
 package com.sprint.project.business_management_system.responseDto;
 
-import lombok.Data;
 
-@Data
 public class EmployeeResponseDto {
     private Integer employeeNumber;
     private String firstName;
     private String lastName;
     private String jobTitle;
+    
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
 	}

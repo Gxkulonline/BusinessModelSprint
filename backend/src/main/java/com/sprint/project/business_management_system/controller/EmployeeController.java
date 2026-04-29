@@ -22,7 +22,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService service;
 
-    // ✅ GET ALL -> 200 OK
+    //  GET ALL -> 200 OK
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAll() {
         List<EmployeeResponseDto> employees = service.getAll();
@@ -36,7 +36,7 @@ public class EmployeeController {
         );
     }
 
-    // ✅ GET BY ID -> 200 OK
+    //  GET BY ID -> 200 OK
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id) {
         EmployeeResponseDto employee = service.getById(id);
@@ -50,7 +50,7 @@ public class EmployeeController {
         );
     }
 
-    // ✅ POST -> 201 CREATED
+    //  POST -> 201 CREATED  
     @PostMapping
     public ResponseEntity<Map<String, Object>> save(@Valid @RequestBody EmployeeRequestDto dto) {
         EmployeeResponseDto saved = service.save(dto);
@@ -64,7 +64,7 @@ public class EmployeeController {
         );
     }
 
-    // ✅ DELETE -> 200 OK
+    //  DELETE -> 200 OK parthvariable Extracts value from URL
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> delete(@PathVariable Integer id) {
         service.delete(id);

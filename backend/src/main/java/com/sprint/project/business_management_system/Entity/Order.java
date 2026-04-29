@@ -1,4 +1,4 @@
-package com.sprint.project.business_management_system.Entity;
+package com.sprint.project.business_management_system.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -44,7 +44,7 @@ public class Order {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<OrderDetail> orderDetails;
 

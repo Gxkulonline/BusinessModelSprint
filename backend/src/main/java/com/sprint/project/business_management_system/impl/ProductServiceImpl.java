@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sprint.project.business_management_system.Entity.Product;
-import com.sprint.project.business_management_system.Entity.ProductLine;
+import com.sprint.project.business_management_system.entity.Product;
+import com.sprint.project.business_management_system.entity.ProductLine;
 import com.sprint.project.business_management_system.exception.ResourceNotFoundException;
 import com.sprint.project.business_management_system.repository.ProductLineRepository;
 import com.sprint.project.business_management_system.repository.ProductRepository;

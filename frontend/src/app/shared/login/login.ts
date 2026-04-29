@@ -47,7 +47,8 @@ export class LoginComponent implements OnInit {
 
         // Navigate based on backend roles
         if (roles.includes('ROLE_ADMIN')) {
-          this.router.navigate(['/yuvasri']); // Admins can go anywhere, default to Yuvasri
+          const memberName = this.selectedMember?.name?.toLowerCase() || 'yuvasri';
+          this.router.navigate(['/' + memberName]);
         } else if (roles.includes('ROLE_YUVASRI')) {
           this.router.navigate(['/yuvasri']);
         } else if (roles.includes('ROLE_GOKUL')) {

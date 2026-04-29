@@ -1,4 +1,4 @@
-package com.sprint.project.business_management_system.Entity;
+package com.sprint.project.business_management_system.entity;
 
 
 import jakarta.persistence.*;
@@ -169,10 +169,10 @@ public class Customer {
     @Column(name = "country")
     private String country;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Payment> payments;
 
     @ManyToOne

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sprint.project.business_management_system.Entity.Customer;
-import com.sprint.project.business_management_system.Entity.Order;
+import com.sprint.project.business_management_system.entity.Customer;
+import com.sprint.project.business_management_system.entity.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 	List<Order> findByCustomer(Customer customer);

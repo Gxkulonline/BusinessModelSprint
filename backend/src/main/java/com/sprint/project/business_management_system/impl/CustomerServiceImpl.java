@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import com.sprint.project.business_management_system.Entity.Customer;
-import com.sprint.project.business_management_system.Entity.Employee;
+import com.sprint.project.business_management_system.entity.Customer;
+import com.sprint.project.business_management_system.entity.Employee;
 import com.sprint.project.business_management_system.exception.BusinessException;
 import com.sprint.project.business_management_system.exception.ResourceNotFoundException;
 import com.sprint.project.business_management_system.repository.CustomerRepository;

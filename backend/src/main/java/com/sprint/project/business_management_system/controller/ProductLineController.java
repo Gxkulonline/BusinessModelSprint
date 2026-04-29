@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.sprint.project.business_management_system.Entity.ProductLine;
+import com.sprint.project.business_management_system.entity.ProductLine;
 import com.sprint.project.business_management_system.repository.ProductLineRepository;
 
 import jakarta.validation.Valid;

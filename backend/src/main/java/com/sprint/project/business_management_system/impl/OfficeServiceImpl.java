@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sprint.project.business_management_system.Entity.Employee;
-import com.sprint.project.business_management_system.Entity.Office;
+import com.sprint.project.business_management_system.entity.Employee;
+import com.sprint.project.business_management_system.entity.Office;
 import com.sprint.project.business_management_system.repository.EmployeeRepository;
 import com.sprint.project.business_management_system.repository.OfficeRepository;
 import com.sprint.project.business_management_system.service.OfficeService;
@@ -22,7 +22,7 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Autowired
     private EmployeeRepository employeeRepo;
-
+// request 
     private Office mapToEntity(OfficeRequestDto dto) {
         Office o = new Office();
         o.setOfficeCode(dto.getOfficeCode());
@@ -36,7 +36,7 @@ public class OfficeServiceImpl implements OfficeService {
         o.setTerritory(dto.getTerritory());
         return o;
     }
-
+//response
     private OfficeResponseDto mapToDto(Office o) {
         OfficeResponseDto dto = new OfficeResponseDto();
         dto.setOfficeCode(o.getOfficeCode());

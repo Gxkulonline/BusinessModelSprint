@@ -59,4 +59,17 @@ public class OfficeController {
             )
         );
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable String id) {
+        OfficeResponseDto office = service.getOfficeById(id);
+        return ResponseEntity.ok(
+            Map.of(
+                "status", "success",
+                "message", "Office fetched successfully",
+                "data", office
+            )
+        );
+    }
+
 }
